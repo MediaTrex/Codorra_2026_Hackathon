@@ -3,7 +3,7 @@
 **Smart AI-Powered Monitoring for Safer Public Spaces**  
 **Mass Surveillance vs Public Safety Hackathon** | 48-Hour Build
 
-![Project Banner](./docs/images/AI-Powered Cybersecurity (1).png)  
+![Project Banner](./docs/images/AI_Powered_Cybersecurity.png)  
 
  *Monitor Density.Preserve Dignity*
 <!-- Replace with actual banner image once designed -->
