@@ -2,7 +2,7 @@ import { Bell, Search, ChevronDown } from "lucide-react";
 
 export function TopBar({ title, subtitle }) {
   return (
-    <div className="flex items-center justify-between px-8 py-4 border-b border-white/5 bg-[#080c1a]/80 backdrop-blur-sm sticky top-0 z-40">
+    <div className="flex items-center justify-between px-8 py-4 border-b border-slate-200 bg-white sticky top-0 z-40">
       <div>
         <h1 className="text-white font-bold text-xl tracking-tight">{title} <span className="text-2xl">👋</span></h1>
         {subtitle && <p className="text-slate-500 text-xs mt-0.5">{subtitle}</p>}
@@ -29,10 +29,10 @@ export function TopBar({ title, subtitle }) {
   );
 }
 
-export function StatCard({ icon, label, value, sub, subColor = "text-green-400" }) {
+export function SectionCard({ title, action, actionLabel = "View All", children, className = "" }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/8 p-5 group hover:border-white/15 transition-all duration-300"
-      style={{ background: "linear-gradient(135deg,#0d1225 0%,#080c1a 100%)" }}>
+    <div className={`rounded-2xl border border-slate-200 overflow-hidden ${className}`}
+      style={{ background: "#ffffff" }}>
       <div className="flex items-center justify-between mb-3">
         <span className="text-slate-500 text-xs font-medium tracking-wide uppercase">{label}</span>
         <div className="text-xl">{icon}</div>
@@ -72,8 +72,8 @@ export function DensityBar({ value }) {
 
 export function SectionCard({ title, action, actionLabel = "View All", children, className = "" }) {
   return (
-    <div className={`rounded-2xl border border-white/8 overflow-hidden ${className}`}
-      style={{ background: "linear-gradient(135deg,#0d1225 0%,#080c1a 100%)" }}>
+    <div className={`rounded-2xl border border-slate-200 overflow-hidden ${className}`}
+      style={{ background: "#ffffff" }}>
       {title && (
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
           <h2 className="text-white font-semibold text-sm">{title}</h2>

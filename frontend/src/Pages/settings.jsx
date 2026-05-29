@@ -1,98 +1,110 @@
-import React, { useState } from 'react';
+import { useState } from "react";
+import { TopBar, PageWrapper } from "../components/UI";
+import { Save } from "lucide-react";
 
-export default function Settings() {
-  const [config, setConfig] = useState({
-    faceBlur: true, dataAnon: true, metaOnly: true,
-    critAlert: true, highAlert: true, modAlert: false, lowAlert: false,
-    darkMode: false, notify: true, refresh: "10"
-  });
-
-  const toggle = (field) => setConfig({ ...config, [field]: !config[field] });
-
-  const ToggleSwitch = ({ active, onClick }) => (
-    <button 
-      onClick={onClick}
-      className={`w-10 h-5 rounded-full p-0.5 transition-all duration-200 focus:outline-none ${active ? 'bg-emerald-500 flex justify-end' : 'bg-slate-200 flex justify-start'}`}
-    >
-      <span className="w-4 h-4 rounded-full bg-white shadow-md block"></span>
+function Toggle({ enabled, onChange }) {
+  return (
+    <button onClick={()=>onChange(!enabled)}
+      className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${enabled?"bg-cyan-500":"bg-white/10"}`}>
+      <span className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-200"
+        style={{left:"2px",transform:enabled?"translateX(20px)":"translateX(0)"}}/>
     </button>
   );
+}
+
+function SettingRow({ label, children }) {
+  return (
+    <div className="flex items-center justify-between py-3 border-b border-white/5 last:border-0">
+      <span className="text-slate-400 text-sm">{label}</span>
+      {children}
+    </div>
+  );
+}
+
+export default function Settings() {
+  const [privacy, setPrivacy]       = useState({faceBlurring:true, dataAnonymization:true, storeOnlyMetadata:true});
+  const [alertSets, setAlertSets]   = useState({critical:true, high:true, moderate:true, low:false});
+  const [general, setGeneral]       = useState({darkMode:false, notifications:true, autoRefresh:10});
+  const [saved, setSaved]           = useState(false);
+
+  const handleSave = () => {
+    setSaved(true);
+    setTimeout(()=>setSaved(false),2000);
+  };
+
+  const card = "rounded-2xl border border-white/8 p-5";
+  const cardStyle = {background:"linear-gradient(135deg,#0d1225 0%,#080c1a 100%)"};
 
   return (
-    <div className="space-y-6 max-w-3xl animate-fadeIn">
-      <div>
-        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Settings</h2>
-        <p className="text-slate-500 text-xs mt-1">Configure your edge application settings and privacy parameters</p>
-      </div>
-
-      {/* PRIVACY PANEL SECTION */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
-        <h3 className="font-bold text-sm text-slate-400 uppercase tracking-wider border-b pb-2">Privacy Settings</h3>
-        <div className="space-y-4">
+    <PageWrapper>
+      <TopBar title="Settings" subtitle="Customize your system preferences"/>
+      <div className="p-8 space-y-6 max-w-2xl">
+        {/* Privacy */}
+        <div className={card} style={cardStyle}>
+          <h2 className="text-white font-semibold text-sm mb-3">Privacy Settings</h2>
           {[
-            { id: 'faceBlur', title: 'Face Blurring', desc: 'Anonymize human identities automatically on feed ingest vectors.' },
-            { id: 'dataAnon', title: 'Data Anonymization', desc: 'Strip out identifiable network signatures and track IDs.' },
-            { id: 'metaOnly', title: 'Store Only Metadata', desc: 'Discard direct raw media formats post inference cycles.' }
-          ].map((item) => (
-            <div key={item.id} className="flex items-center justify-between gap-4">
-              <div>
-                <h4 className="font-bold text-xs text-slate-800">{item.title}</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">{item.desc}</p>
+            {key:"faceBlurring",       label:"Face Blurring"},
+            {key:"dataAnonymization",  label:"Data Anonymization"},
+            {key:"storeOnlyMetadata",  label:"Store Only Metadata"},
+          ].map(({key,label})=>(
+            <SettingRow key={key} label={label}>
+              <div className="flex items-center gap-2">
+                <span className={`text-xs ${privacy[key]?"text-cyan-400":"text-slate-600"}`}>{privacy[key]?"Enabled":"Disabled"}</span>
+                <Toggle enabled={privacy[key]} onChange={v=>setPrivacy({...privacy,[key]:v})}/>
               </div>
-              <ToggleSwitch active={config[item.id]} onClick={() => toggle(item.id)} />
-            </div>
+            </SettingRow>
           ))}
         </div>
-      </div>
 
-      {/* ALERTS THRESHOLDS SECTION */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
-        <h3 className="font-bold text-sm text-slate-400 uppercase tracking-wider border-b pb-2">Alert Triggers</h3>
-        <div className="grid grid-cols-2 gap-4">
-          {['Critical Alerts', 'High Alerts', 'Moderate Alerts', 'Low Alerts'].map((label, index) => {
-            const key = ['critAlert', 'highAlert', 'modAlert', 'lowAlert'][index];
-            return (
-              <div key={key} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
-                <span className="text-xs font-semibold text-slate-700">{label}</span>
-                <ToggleSwitch active={config[key]} onClick={() => toggle(key)} />
+        {/* Alert settings */}
+        <div className={card} style={cardStyle}>
+          <h2 className="text-white font-semibold text-sm mb-3">Alert Settings</h2>
+          {[
+            {key:"critical", label:"Critical Alerts", color:"text-red-400"   },
+            {key:"high",     label:"High Alerts",     color:"text-orange-400"},
+            {key:"moderate", label:"Moderate Alerts", color:"text-yellow-400"},
+            {key:"low",      label:"Low Alerts",      color:"text-green-400" },
+          ].map(({key,label,color})=>(
+            <SettingRow key={key} label={<span className={color}>{label}</span>}>
+              <div className="flex items-center gap-2">
+                <span className={`text-xs ${alertSets[key]?"text-cyan-400":"text-slate-600"}`}>{alertSets[key]?"On":"Off"}</span>
+                <Toggle enabled={alertSets[key]} onChange={v=>setAlertSets({...alertSets,[key]:v})}/>
               </div>
-            );
-          })}
+            </SettingRow>
+          ))}
         </div>
-      </div>
 
-      {/* CONTROL PARAMETERS SECTION */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
-        <h3 className="font-bold text-sm text-slate-400 uppercase tracking-wider border-b pb-2">General Engine Settings</h3>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="font-bold text-xs text-slate-800">Dark Mode</h4>
-              <p className="text-[11px] text-slate-400 mt-0.5">Toggle interface design skin elements.</p>
+        {/* General */}
+        <div className={card} style={cardStyle}>
+          <h2 className="text-white font-semibold text-sm mb-3">General Settings</h2>
+          <SettingRow label="Dark Mode">
+            <div className="flex items-center gap-2">
+              <span className={`text-xs ${general.darkMode?"text-cyan-400":"text-slate-600"}`}>{general.darkMode?"On":"Off"}</span>
+              <Toggle enabled={general.darkMode} onChange={v=>setGeneral({...general,darkMode:v})}/>
             </div>
-            <ToggleSwitch active={config.darkMode} onClick={() => toggle('darkMode')} />
-          </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="font-bold text-xs text-slate-800">Push Notifications</h4>
-              <p className="text-[11px] text-slate-400 mt-0.5">Broadcast threshold messages immediately.</p>
+          </SettingRow>
+          <SettingRow label="Notifications">
+            <div className="flex items-center gap-2">
+              <span className={`text-xs ${general.notifications?"text-cyan-400":"text-slate-600"}`}>{general.notifications?"On":"Off"}</span>
+              <Toggle enabled={general.notifications} onChange={v=>setGeneral({...general,notifications:v})}/>
             </div>
-            <ToggleSwitch active={config.notify} onClick={() => toggle('notify')} />
-          </div>
-          <div className="flex items-center justify-between gap-4 pt-2">
-            <div>
-              <h4 className="font-bold text-xs text-slate-800">Auto Refresh (seconds)</h4>
-              <p className="text-[11px] text-slate-400 mt-0.5">Telemetry matrix loop execution clock interval.</p>
+          </SettingRow>
+          <SettingRow label="Auto Refresh (sec)">
+            <div className="flex items-center gap-1">
+              <button onClick={()=>setGeneral({...general,autoRefresh:Math.max(0,general.autoRefresh-1)})}
+                className="w-7 h-7 rounded-lg bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 text-sm transition-colors">−</button>
+              <span className="text-white text-sm font-medium w-8 text-center">{general.autoRefresh}</span>
+              <button onClick={()=>setGeneral({...general,autoRefresh:general.autoRefresh+1})}
+                className="w-7 h-7 rounded-lg bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 text-sm transition-colors">+</button>
             </div>
-            <input 
-              type="number" 
-              value={config.refresh} 
-              onChange={(e) => setConfig({...config, refresh: e.target.value})}
-              className="bg-slate-50 border w-24 text-center border-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold focus:outline-none focus:border-blue-500" 
-            />
-          </div>
+          </SettingRow>
         </div>
+
+        <button onClick={handleSave}
+          className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${saved?"bg-green-500/20 text-green-400 border border-green-500/30":"bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:from-cyan-400 hover:to-blue-500 shadow-lg shadow-cyan-500/20"}`}>
+          <Save size={16}/>{saved?"✓ Saved Successfully":"Save Settings"}
+        </button>
       </div>
-    </div>
+    </PageWrapper>
   );
 }
