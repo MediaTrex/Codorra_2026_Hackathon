@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Sidebar from "./components/Sidebar";
-import Dashboard from "./pages/Dashboard";
-import LiveMonitoring from "./pages/LiveMonitoring";
-import Heatmap from "./pages/Heatmap";
-import Analytics from "./pages/Analytics";
-import Alerts from "./pages/Alerts";
+import Dashboard from "./Pages/Dashboard";
+import LiveMonitoring from "./Pages/LiveMonitoring";
+import Heatmap from "./Pages/Heatmap";
+import Analytics from "./Pages/Analytics";
+import Alerts from "./Pages/Alerts";
 import Reports from "./pages/Reports";
-import Settings from "./pages/Settings";
-import Login from "./pages/Login";
+import Settings from "./Pages/Settings";
+import Login from "./Pages/Login";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
