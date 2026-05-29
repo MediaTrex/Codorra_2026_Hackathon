@@ -7,10 +7,8 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
-  background: #ffffff;
-  color: #f1f5f9;
-  -webkit-font-smoothing: antialiased;
+  
+  @apply bg-slate-50 dark:bg-[#080c1a] text-slate-900 dark:text-white transition-colors duration-300;
 }
 
 ::-webkit-scrollbar { width: 4px; }

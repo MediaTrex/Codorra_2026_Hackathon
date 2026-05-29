@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Video, Map, BarChart2, Bell,
-  FileText, MapPin, Settings, User, LogOut, Shield,
+  FileText, MapPin, Settings, LogOut, Shield,
   ChevronLeft, ChevronRight,
 } from "lucide-react";
 
@@ -13,14 +13,13 @@ const NAV = [
   { id: "reports",    label: "Reports",          icon: FileText        },
   { id: "locations",  label: "Locations",        icon: MapPin          },
   { id: "settings",   label: "Settings",         icon: Settings        },
-  { id: "profile",    label: "Profile",          icon: User            },
 ];
 
 export default function Sidebar({ activePage, setActivePage, collapsed, setCollapsed, onLogout }) {
   return (
     <aside
       className={`fixed left-0 top-0 h-full z-50 flex flex-col transition-all duration-300 border-r border-white/5 ${collapsed ? "w-16" : "w-64"}`}
-      style={{ background: "#ffffff", boxShadow: "4px 0 24px rgba(0,0,0,0.08)", borderRight: "1px solid #e2e8f0" }}
+      style={{ background: "linear-gradient(180deg,#080c1a 0%,#0a0f20 100%)", boxShadow: "4px 0 30px rgba(0,0,0,0.4)" }}
     >
       {/* Logo */}
       <div className={`flex items-center gap-3 p-4 border-b border-white/5 ${collapsed ? "justify-center" : ""}`}>
