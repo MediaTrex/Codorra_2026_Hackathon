@@ -36,7 +36,6 @@ async def register(user_data: RegisterRequest, response: Response):
     return {
         "success": True,
         "message": result.get("message"),
-        "user_id": result.get("user_id"),
         "user": {
             "id": result.get("user_id"),
             "email": result.get("email"),
