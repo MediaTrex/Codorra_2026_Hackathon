@@ -41,3 +41,20 @@ GET /api/detections/{camera_id}/history?limit=
 GET /api/detections/{camera_id}/trends?hours=
 Responses: JSON with success, data, ids, totals.
 ```
+
+
+## Camera APIs and Detection APIs architecture:
+
+ [CCTV / Webcam]
+        ↓
+   Camera API
+(register/manage streams)
+        ↓
+ YOLO Detection Model
+        ↓
+  Detection API
+(store crowd results)
+        ↓
+     MongoDB
+        ↓
+Dashboard + Alerts
