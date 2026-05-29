@@ -1,51 +1,61 @@
-import React from 'react';
+import { useState } from 'react';
 
 export default function Heatmap() {
+  const [selectedDate] = useState("Today");
+
   return (
-    <div className="space-y-6 animate-fadeIn">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Crowd Density Heatmap</h2>
-          <p className="text-slate-500 text-xs mt-1">Visualize crowd density layers across spatial city coordinates</p>
+          <h1 className="text-4xl font-bold text-gray-900">Crowd Density Heatmap</h1>
+          <p className="text-gray-500">Visualize crowd density across the city</p>
         </div>
-        <button className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-bold shadow-sm hover:bg-slate-50">
-          Today ▼
-        </button>
+        <select className="bg-white border border-gray-300 rounded-xl px-5 py-2.5">
+          <option>Today</option>
+          <option>Yesterday</option>
+          <option>Last 7 Days</option>
+        </select>
       </div>
 
-      {/* HEATMAP MAIN CANVAS PLATFORM */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col h-[520px]">
-        <div className="flex-1 bg-slate-50 rounded-xl relative overflow-hidden border border-slate-200/60 flex items-center justify-center">
-          {/* MAP CANVAS BACKDROP LAYER */}
-          <div className="absolute inset-0 opacity-[0.06] bg-[radial-gradient(#000_1.5px,transparent_1.5px)] [background-size:20px_20px]"></div>
-
-          {/* SIMULATED GAUSSIAN GRADIENT HEAT BURSTS */}
-          <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-red-500/40 rounded-full filter blur-[50px] mix-blend-multiply animate-pulse"></div>
-          <div className="absolute top-1/3 left-1/3 w-80 h-80 bg-amber-400/50 rounded-full filter blur-[65px] mix-blend-multiply"></div>
-          <div className="absolute bottom-1/4 right-1/3 w-52 h-52 bg-emerald-400/40 rounded-full filter blur-[45px] mix-blend-multiply"></div>
-
-          {/* STREET OVERLAY MARKERS MATCHING GRAPHIC SPEC */}
-          <div className="absolute top-1/3 right-1/3 bg-white/90 border shadow-sm backdrop-blur-sm text-[10px] font-bold text-slate-800 px-2.5 py-1 rounded-lg">
-            🏬 City Mall Cluster
-          </div>
-          <div className="absolute top-1/2 left-1/4 bg-white/90 border shadow-sm backdrop-blur-sm text-[10px] font-bold text-slate-800 px-2.5 py-1 rounded-lg">
-            🚉 Railway Hub Junction
-          </div>
-
-          <p className="text-slate-400 font-medium text-xs bg-white border border-slate-200/80 px-4 py-2 rounded-xl shadow-sm z-10 backdrop-blur-md">
-            GIS Thermal Render Engine Pipeline Wrapper
-          </p>
-
-          {/* LEGEND SPEC RANGE SELECTOR ON FOOTER GRID */}
-          <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-xl border border-slate-200 shadow-lg max-w-sm w-64 flex flex-col gap-1.5">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Density Index Range</span>
-            <div className="h-2.5 w-full bg-gradient-to-r from-emerald-400 via-amber-400 to-red-500 rounded-full"></div>
-            <div className="flex justify-between text-[9px] font-extrabold text-slate-500 uppercase tracking-wider">
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="flex justify-between mb-6">
+          <h3 className="font-semibold text-lg">City-Wide Density Heatmap</h3>
+          <div className="flex items-center gap-6 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-2 bg-green-400 rounded"></div>
               <span>Low</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-2 bg-yellow-400 rounded"></div>
               <span>Moderate</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-2 bg-orange-500 rounded"></div>
+              <span>High</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-2 bg-red-500 rounded"></div>
               <span>Critical</span>
             </div>
           </div>
+        </div>
+
+        {/* Heatmap Placeholder */}
+        <div className="h-[560px] bg-gray-100 rounded-2xl relative overflow-hidden flex items-center justify-center border border-dashed">
+          <div className="text-center">
+            <p className="text-2xl mb-4">🌍 City Heatmap Visualization</p>
+            <p className="text-gray-500 max-w-md">
+              This area will contain your actual heatmap (using Leaflet + Heatmap Layer or Canvas)
+            </p>
+          </div>
+
+          {/* Sample Heat Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-green-400/20 via-yellow-400/40 to-red-500/60 opacity-70"></div>
+          
+          {/* Sample Location Labels */}
+          <div className="absolute top-20 left-1/4 bg-white/90 px-4 py-2 rounded-xl shadow text-sm font-medium">City Mall - 85%</div>
+          <div className="absolute top-1/3 right-1/3 bg-white/90 px-4 py-2 rounded-xl shadow text-sm font-medium">Metro Station - 74%</div>
+          <div className="absolute bottom-1/3 left-1/2 bg-white/90 px-4 py-2 rounded-xl shadow text-sm font-medium">Railway Station - 67%</div>
         </div>
       </div>
     </div>

@@ -1,96 +1,97 @@
-import React from 'react';
+import { TrendingUp, Users } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+
+const trendData = [
+  { day: '12 May', density: 42 }, { day: '13 May', density: 48 },
+  { day: '14 May', density: 55 }, { day: '15 May', density: 61 },
+  { day: '16 May', density: 58 }, { day: '17 May', density: 72 },
+  { day: '18 May', density: 68 },
+];
+
+const categoryData = [
+  { name: 'Low', value: 28, color: '#22c55e' },
+  { name: 'Moderate', value: 34, color: '#eab308' },
+  { name: 'High', value: 26, color: '#f97316' },
+  { name: 'Critical', value: 12, color: '#ef4444' },
+];
 
 export default function Analytics() {
-  const analyticsMetrics = [
-    { name: "Total People Count", sum: "125,430", flag: "↑ 18.4%", mode: "success" },
-    { name: "Peak Density Index", sum: "92%", flag: "↑ 5%", mode: "danger" },
-    { name: "Avg Daily Density", sum: "63%", flag: "↓ 1%", mode: "warning" },
-    { name: "Total Alerts Issued", sum: "36", flag: "↑ 12%", mode: "success" },
-  ];
-
   return (
-    <div className="space-y-6 animate-fadeIn">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Analytics Overview</h2>
-          <p className="text-slate-500 text-xs mt-1">Detailed insights, trends, and historic processing validation</p>
-        </div>
-        <button className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-bold shadow-sm">
-          Last 7 Days ▼
-        </button>
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-4xl font-bold text-gray-900">Analytics</h1>
+        <p className="text-gray-500">Detailed insights and trends</p>
       </div>
 
-      {/* METRIC SUMMARIES */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {analyticsMetrics.map((card, index) => (
-          <div key={index} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-1.5">
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{card.name}</p>
-            <div className="flex items-baseline justify-between">
-              <h3 className="text-2xl font-black text-slate-800 tracking-tight">{card.sum}</h3>
-              <span className={`text-xs font-extrabold ${card.mode === 'success' ? 'text-emerald-500' : 'text-red-500'}`}>{card.flag}</span>
-            </div>
-          </div>
-        ))}
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <p className="text-gray-500">Total People Count</p>
+          <p className="text-5xl font-bold mt-3">125,430</p>
+          <p className="text-green-600 text-sm mt-2">+5.2% from last week</p>
+        </div>
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <p className="text-gray-500">Average Density</p>
+          <p className="text-5xl font-bold mt-3">63%</p>
+          <p className="text-green-600 text-sm mt-2">+7% from yesterday</p>
+        </div>
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <p className="text-gray-500">Peak Hour Alerts</p>
+          <p className="text-5xl font-bold mt-3">36</p>
+          <p className="text-orange-600 text-sm mt-2">-12% from last week</p>
+        </div>
       </div>
 
-      {/* GRAPH CHART INFRASTRUCTURE */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* LINE GRAPH REPRESENTATION */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
-          <div>
-            <h4 className="font-bold text-slate-800 text-sm">Density Trend Lines</h4>
-            <p className="text-[11px] text-slate-400">Aggregated volumetric flow over specified times</p>
-          </div>
-          
-          {/* SIMULATED COMPONENT GRAPH TIMELINE VIA SECURE CRISP SVGS */}
-          <div className="h-56 my-4 w-full flex items-end">
-            <svg className="w-full h-full" viewBox="0 0 400 120" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2"/>
-                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0"/>
-                </linearGradient>
-              </defs>
-              <path d="M 0 80 Q 50 20 100 60 T 200 40 T 300 90 T 400 30" fill="none" stroke="#3b82f6" strokeWidth="3" strokeLinecap="round" />
-              <path d="M 0 80 Q 50 20 100 60 T 200 40 T 300 90 T 400 30 L 400 120 L 0 120 Z" fill="url(#chartGrad)" />
-            </svg>
-          </div>
+      {/* Trend Chart */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <h3 className="font-semibold text-lg mb-6">Density Trend (Last 7 Days)</h3>
+        <ResponsiveContainer width="100%" height={320}>
+          <LineChart data={trendData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="day" />
+            <YAxis />
+            <Tooltip />
+            <Line type="natural" dataKey="density" stroke="#3b82f6" strokeWidth={4} dot={{ fill: '#1e40af', r: 6 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
 
-          <div className="flex justify-between text-[10px] font-bold text-slate-400 font-mono border-t pt-3">
-            <span>12 MAY</span>
-            <span>14 MAY</span>
-            <span>16 MAY</span>
-            <span>18 MAY</span>
-            <span>20 MAY</span>
-          </div>
-        </div>
-
-        {/* TOP PERFORMING LOCATIONS BAR BLOCK */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
-          <div>
-            <h4 className="font-bold text-slate-800 text-sm">Top Locations by Density</h4>
-            <p className="text-[11px] text-slate-400">Highest volume nodes evaluated</p>
-          </div>
-
-          <div className="space-y-3.5 pt-2">
+      {/* Top Locations + Distribution */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <h3 className="font-semibold mb-6">Top Locations by Density</h3>
+          <div className="space-y-5">
             {[
-              { location: "City Mall", metric: "85%", size: "w-[85%]", bg: "bg-red-500" },
-              { location: "Metro Station", metric: "74%", size: "w-[74%]", bg: "bg-orange-500" },
-              { location: "Railway Station", metric: "67%", size: "w-[67%]", bg: "bg-amber-500" },
-              { location: "Bus Stand", metric: "58%", size: "w-[58%]", bg: "bg-blue-500" },
-              { location: "Park Zone", metric: "32%", size: "w-[32%]", bg: "bg-emerald-500" },
-            ].map((bar, i) => (
-              <div key={i} className="space-y-1">
-                <div className="flex justify-between text-xs font-semibold">
-                  <span className="text-slate-600">{bar.location}</span>
-                  <span className="text-slate-800 font-bold">{bar.metric}</span>
-                </div>
-                <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full ${bar.bg} ${bar.size}`}></div>
+              { place: "City Mall", percent: "85%", color: "red" },
+              { place: "Metro Station", percent: "74%", color: "orange" },
+              { place: "Railway Station", percent: "67%", color: "yellow" },
+              { place: "Bus Stand", percent: "58%", color: "green" },
+            ].map((item, i) => (
+              <div key={i} className="flex items-center justify-between">
+                <span className="font-medium">{item.place}</span>
+                <div className="flex items-center gap-3">
+                  <div className="h-2.5 w-40 bg-gray-100 rounded">
+                    <div className={`h-2.5 rounded bg-${item.color}-500`} style={{ width: item.percent }}></div>
+                  </div>
+                  <span className="font-bold w-12 text-right">{item.percent}</span>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <h3 className="font-semibold mb-6">Density by Category</h3>
+          <ResponsiveContainer width="100%" height={280}>
+            <PieChart>
+              <Pie data={categoryData} cx="50%" cy="50%" outerRadius={110} dataKey="value">
+                {categoryData.map((entry, i) => (
+                  <Cell key={i} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

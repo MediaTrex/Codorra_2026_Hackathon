@@ -1,128 +1,126 @@
-import React from 'react';
+import { Users, Camera, AlertTriangle, TrendingUp, MapPin } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+
+const stats = [
+  { label: "Total Locations", value: "24", change: "+2% from yesterday", icon: Users, color: "blue" },
+  { label: "Live Feeds", value: "18", change: "All Online", icon: Camera, color: "green" },
+  { label: "High Density Alerts", value: "7", change: "Active Now", icon: AlertTriangle, color: "orange" },
+  { label: "Avg Density", value: "63%", change: "+8% from yesterday", icon: TrendingUp, color: "purple" },
+];
+
+const densityData = [
+  { name: 'Low (0-30%)', value: 26, color: '#22c55e' },
+  { name: 'Moderate (30-60%)', value: 34, color: '#eab308' },
+  { name: 'High (60-80%)', value: 28, color: '#f97316' },
+  { name: 'Critical (80-100%)', value: 12, color: '#ef4444' },
+];
+
+const trendData = [
+  { time: '10:00', density: 45 }, { time: '11:00', density: 52 },
+  { time: '12:00', density: 68 }, { time: '13:00', density: 75 },
+  { time: '14:00', density: 82 }, { time: '15:00', density: 71 },
+];
 
 export default function Dashboard() {
-  const metricGrid = [
-    { name: "Total Locations", data: "24", status: "↑ 12% from yesterday", mode: "neutral", graphic: "📍" },
-    { name: "Live Feeds", data: "18", status: "● Online", mode: "success", graphic: "🎥" },
-    { name: "High Density Alerts", data: "7", status: "● Active Now", mode: "danger", graphic: "⚠️" },
-    { name: "Avg Density", data: "63%", status: "↑ 8% from yesterday", mode: "warning", graphic: "📊" },
-  ];
-
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-          Dashboard 👋
-        </h2>
-        <p className="text-slate-500 text-xs mt-1">Real-time overview of crowd density across all locations</p>
+        <h1 className="text-4xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-gray-500 mt-1">Real-time overview of crowd density across all locations</p>
       </div>
 
-      {/* METRIC CARD BAR */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {metricGrid.map((item, id) => (
-          <div key={id} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
-            <div className="space-y-1.5">
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{item.name}</p>
-              <h3 className="text-2xl font-bold text-slate-800 tracking-tight">{item.data}</h3>
-              <p className={`text-[11px] font-bold ${
-                item.mode === 'success' ? 'text-emerald-600' :
-                item.mode === 'danger' ? 'text-red-500' :
-                item.mode === 'warning' ? 'text-amber-600' : 'text-blue-500'
-              }`}>{item.status}</p>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, index) => (
+          <div key={index} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 card">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">{stat.label}</p>
+                <p className="text-4xl font-bold mt-3 text-gray-900">{stat.value}</p>
+              </div>
+              <stat.icon className={`w-10 h-10 text-${stat.color}-500`} />
             </div>
-            <div className="w-11 h-11 bg-slate-50 rounded-xl flex items-center justify-center text-lg shadow-inner">{item.graphic}</div>
+            <p className="text-sm text-green-600 mt-4 font-medium">{stat.change}</p>
           </div>
         ))}
       </div>
 
-      {/* MIDDLE ANALYTICS BLOCK */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* MAP COMPONENT FRAME */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col">
-          <div className="mb-4">
-            <h4 className="font-bold text-slate-800 text-sm">Live Overview</h4>
-            <p className="text-[11px] text-slate-400">Spatial distribution of computer vision inference streams</p>
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-6">
+        {/* Live Overview Map */}
+        <div className="lg:col-span-4 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="font-semibold text-lg">Live Overview</h3>
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <MapPin className="w-4 h-4" /> 24 Locations
+            </div>
           </div>
-          <div className="flex-1 min-h-[280px] bg-slate-50 rounded-xl relative overflow-hidden border border-slate-200/60 flex items-center justify-center">
-            <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:12px_12px]"></div>
-            
-            {/* HOTSPOT LABELS MATCHING CARD DESIGN ELEMENTS */}
-            <div className="absolute top-1/4 left-1/4 bg-emerald-500 text-white font-extrabold text-[11px] px-2.5 py-1 rounded-full shadow-lg border-2 border-white flex items-center gap-1">
-              <span className="w-1 h-1 bg-white rounded-full animate-ping"></span>32%
+          <div className="h-96 bg-gray-100 rounded-xl flex items-center justify-center border border-dashed border-gray-300 relative overflow-hidden">
+            <div className="text-center">
+              <p className="text-gray-400 mb-2">🗺️ Interactive City Map</p>
+              <p className="text-xs text-gray-500">Replace this with Leaflet / Google Maps component</p>
             </div>
-            <div className="absolute top-1/2 left-1/2 bg-red-500 text-white font-extrabold text-[11px] px-2.5 py-1 rounded-full shadow-lg border-2 border-white flex items-center gap-1">
-              <span className="w-1 h-1 bg-white rounded-full animate-ping"></span>85%
+            {/* Sample markers */}
+            <div className="absolute top-12 left-12 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center animate-pulse">
+              <div className="w-3 h-3 bg-white rounded-full" />
             </div>
-            <div className="absolute bottom-1/4 right-1/3 bg-orange-500 text-white font-extrabold text-[11px] px-2.5 py-1 rounded-full shadow-lg border-2 border-white flex items-center gap-1">
-              <span className="w-1 h-1 bg-white rounded-full animate-ping"></span>74%
+            <div className="absolute top-1/3 right-1/4 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center animate-pulse">
+              <div className="w-3 h-3 bg-white rounded-full" />
             </div>
-
-            <p className="text-slate-400 font-medium text-xs bg-white border px-4 py-2 rounded-xl shadow-sm z-10">Mapbox / Leaflet Tracking Matrix Container</p>
           </div>
         </div>
 
-        {/* DISTRIBUTION SEGMENTS */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
-          <div>
-            <h4 className="font-bold text-slate-800 text-sm">Density Distribution</h4>
-            <p className="text-[11px] text-slate-400">Current levels categorized</p>
-          </div>
-
-          <div className="my-6 flex justify-center relative">
-            <div className="w-32 h-32 rounded-full border-[12px] border-slate-100 flex items-center justify-center relative">
-              <div className="absolute inset-0 rounded-full border-[12px] border-blue-500 border-t-transparent border-r-transparent rotate-45"></div>
-              <div className="absolute inset-0 rounded-full border-[12px] border-red-500 border-b-transparent border-l-transparent -rotate-12"></div>
-              <div className="text-center">
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Total</span>
-                <span className="text-xl font-black text-slate-800">24</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            {[
-              { label: "Low (0-30%)", share: "36%", fill: "bg-emerald-500" },
-              { label: "Moderate (30-60%)", share: "34%", fill: "bg-blue-500" },
-              { label: "High (60-80%)", share: "28%", fill: "bg-orange-500" },
-              { label: "Critical (80-100%)", share: "12%", fill: "bg-red-500" },
-            ].map((row, key) => (
-              <div key={key} className="flex items-center justify-between text-xs font-semibold">
-                <div className="flex items-center gap-2 text-slate-500">
-                  <span className={`w-2 h-2 rounded-full ${row.fill}`}></span>
-                  <span>{row.label}</span>
-                </div>
-                <span className="text-slate-800 font-bold">{row.share}</span>
+        {/* Density Distribution */}
+        <div className="lg:col-span-3 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <h3 className="font-semibold text-lg mb-6">Density Distribution</h3>
+          <ResponsiveContainer width="100%" height={320}>
+            <PieChart>
+              <Pie
+                data={densityData}
+                cx="50%"
+                cy="50%"
+                innerRadius={85}
+                outerRadius={130}
+                dataKey="value"
+              >
+                {densityData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="grid grid-cols-2 gap-3 mt-4 text-sm">
+            {densityData.map((item, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
+                <span>{item.name}</span>
+                <span className="ml-auto font-medium">{item.value}%</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* LOWER DATA TABLE PREVIEW */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h4 className="font-bold text-slate-800 text-sm">Recent Alerts</h4>
-            <p className="text-[11px] text-slate-400">Real-time edge device safety violations</p>
-          </div>
-          <button className="text-xs font-bold text-blue-600 hover:underline">View All Alerts →</button>
+      {/* Recent Alerts */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="font-semibold text-lg">Recent Alerts</h3>
+          <button className="text-blue-600 text-sm font-medium hover:underline">View All Alerts →</button>
         </div>
-
+        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
-            { zone: "City Mall Area", msg: "Critical Density Alert", value: "85%", timeframe: "2 mins ago", badge: "bg-red-50 text-red-700 border-red-100" },
-            { zone: "Metro Station Gate", msg: "High Density Alert", value: "74%", timeframe: "5 mins ago", badge: "bg-orange-50 text-orange-700 border-orange-100" },
-            { zone: "Bus Stand Platform", msg: "Moderate Density Alert", value: "68%", timeframe: "8 mins ago", badge: "bg-amber-50 text-amber-700 border-amber-100" },
-          ].map((item, idx) => (
-            <div key={idx} className={`p-4 rounded-xl border flex flex-col justify-between h-24 shadow-sm ${item.badge}`}>
-              <div className="flex justify-between items-start">
-                <div>
-                  <h5 className="font-bold text-xs text-slate-900">{item.zone}</h5>
-                  <p className="text-[11px] font-medium opacity-80 mt-0.5">{item.msg}</p>
-                </div>
-                <span className="text-sm font-black bg-white/60 backdrop-blur-sm px-2 py-0.5 rounded-lg border border-black/5 text-slate-950">{item.value}</span>
+            { location: "City Mall Area", density: "85%", time: "2 mins ago", level: "Critical", color: "red" },
+            { location: "Metro Station Gate", density: "74%", time: "5 mins ago", level: "High", color: "orange" },
+            { location: "Bus Stand Platform", density: "58%", time: "8 mins ago", level: "Moderate", color: "yellow" },
+          ].map((alert, i) => (
+            <div key={i} className="border border-gray-100 rounded-xl p-5 hover:border-gray-200 transition-all">
+              <div className={`inline-block px-3 py-1 text-xs font-medium rounded-full bg-${alert.color}-100 text-${alert.color}-700`}>
+                {alert.level}
               </div>
-              <span className="text-[10px] font-bold opacity-60 uppercase self-end tracking-wider">⏱️ {item.timeframe}</span>
+              <p className="font-semibold mt-4">{alert.location}</p>
+              <p className="text-3xl font-bold text-gray-900 mt-1">{alert.density}</p>
+              <p className="text-xs text-gray-500 mt-1">{alert.time}</p>
             </div>
           ))}
         </div>
