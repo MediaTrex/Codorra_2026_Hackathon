@@ -14,11 +14,8 @@ export default function App() {
   const [activePage, setActivePage] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  if (!isLoggedIn) {
-    return <Login onLogin={() => setIsLoggedIn(true)} />;
-  }
+  if (!isLoggedIn) return <Login onLogin={() => setIsLoggedIn(true)} />;
 
-  // Map state keys directly to your component modular architecture pages
   const pages = {
     dashboard: <Dashboard />,
     monitoring: <LiveMonitoring />,
@@ -30,15 +27,15 @@ export default function App() {
   };
 
   return (
-    <div className="flex h-screen bg-[#05070f] overflow-hidden text-slate-100 font-sans">
-      <Sidebar 
-        activePage={activePage} 
-        setActivePage={setActivePage} 
-        collapsed={sidebarCollapsed} 
+    <div className="flex h-screen bg-[#05070f] overflow-hidden">
+      <Sidebar
+        activePage={activePage}
+        setActivePage={setActivePage}
+        collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
         onLogout={() => setIsLoggedIn(false)}
       />
-      <main className={`flex-1 overflow-y-auto transition-all duration-300 p-8`}>
+      <main className={`flex-1 overflow-y-auto transition-all duration-300 ${sidebarCollapsed ? "ml-16" : "ml-64"}`}>
         {pages[activePage] || <Dashboard />}
       </main>
     </div>
