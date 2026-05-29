@@ -1,87 +1,77 @@
-import { useState } from "react";
-import { TopBar, DensityBar, PageWrapper } from "../components/UI";
-import { mockData } from "../services/api";
-import { Eye, RefreshCw } from "lucide-react";
-
-const FILTERS = ["All Alerts","Critical","High","Moderate","Low"];
-
-const levelColors = {
-  critical:{ bg:"bg-red-500/10",    border:"border-red-500/20",    text:"text-red-400",    badge:"bg-red-500/20 text-red-400",    dot:"bg-red-500"    },
-  high:    { bg:"bg-orange-500/10", border:"border-orange-500/20", text:"text-orange-400", badge:"bg-orange-500/20 text-orange-400", dot:"bg-orange-500" },
-  moderate:{ bg:"bg-yellow-500/10", border:"border-yellow-500/20", text:"text-yellow-400", badge:"bg-yellow-500/20 text-yellow-400", dot:"bg-yellow-500" },
-  low:     { bg:"bg-green-500/10",  border:"border-green-500/20",  text:"text-green-400",  badge:"bg-green-500/20 text-green-400",  dot:"bg-green-500"  },
-};
+import React, { useState } from 'react';
 
 export default function Alerts() {
-  const [filter, setFilter] = useState("All Alerts");
-  const alerts = mockData.alerts;
-  const filtered = filter==="All Alerts" ? alerts : alerts.filter(a=>a.level===filter.toLowerCase());
+  const [activeTab, setActiveTab] = useState('all');
+  
+  const alertData = [
+    { id: 1, location: "City Mall Entrance", status: "Critical Density Alert", level: "85%", time: "2 mins ago", type: "critical" },
+    { id: 2, location: "Metro Station Gate", status: "High Density Alert", level: "74%", time: "5 mins ago", type: "high" },
+    { id: 3, location: "Railway Station", status: "High Density Alert", level: "67%", time: "8 mins ago", type: "high" },
+    { id: 4, location: "Bus Stand Platform", status: "Moderate Density Alert", level: "58%", time: "12 mins ago", type: "moderate" },
+    { id: 5, location: "College Campus", status: "Moderate Density Alert", level: "46%", time: "15 mins ago", type: "moderate" },
+    { id: 6, location: "Park Entrance", status: "Low Density Notification", level: "32%", time: "25 mins ago", type: "low" },
+  ];
+
+  const filteredAlerts = alertData.filter(alert => activeTab === 'all' || alert.type === activeTab);
+
+  const getStyle = (type) => {
+    switch(type) {
+      case 'critical': return { bg: 'bg-red-50 text-red-700 border-red-100', badge: 'bg-red-500 text-white' };
+      case 'high': return { bg: 'bg-orange-50 text-orange-700 border-orange-100', badge: 'bg-orange-500 text-white' };
+      case 'moderate': return { bg: 'bg-amber-50 text-amber-700 border-amber-100', badge: 'bg-amber-500 text-white' };
+      default: return { bg: 'bg-emerald-50 text-emerald-700 border-emerald-100', badge: 'bg-emerald-500 text-white' };
+    }
+  };
 
   return (
-    <PageWrapper>
-      <TopBar title="Alerts" subtitle="Real-time alerts and notifications"/>
-      <div className="p-8 space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex gap-1 bg-white/5 rounded-xl p-1 border border-white/8">
-            {FILTERS.map(f=>(
-              <button key={f} onClick={()=>setFilter(f)}
-                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${filter===f?"bg-cyan-500/20 text-cyan-400 border border-cyan-500/30":"text-slate-500 hover:text-slate-200"}`}>
-                {f}
-              </button>
-            ))}
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/8 text-slate-400 hover:text-white text-sm transition-colors">
-            <RefreshCw size={14}/>Refresh
-          </button>
-        </div>
-
-        <div className="flex gap-4">
-          {[
-            {label:"Total",    count:alerts.length,                              color:"text-white"  },
-            {label:"Critical", count:alerts.filter(a=>a.level==="critical").length, color:"text-red-400" },
-            {label:"High",     count:alerts.filter(a=>a.level==="high").length,     color:"text-orange-400"},
-            {label:"Moderate", count:alerts.filter(a=>a.level==="moderate").length, color:"text-yellow-400"},
-            {label:"Low",      count:alerts.filter(a=>a.level==="low").length,      color:"text-green-400"},
-          ].map(s=>(
-            <div key={s.label} className="rounded-xl border border-white/8 px-4 py-3 text-center" style={{background:"linear-gradient(135deg,#0d1225 0%,#080c1a 100%)"}}>
-              <div className={`text-xl font-bold ${s.color}`}>{s.count}</div>
-              <div className="text-slate-600 text-xs mt-0.5">{s.label}</div>
-            </div>
-          ))}
-        </div>
-
-        <div className="rounded-2xl border border-white/8 overflow-hidden" style={{background:"linear-gradient(135deg,#0d1225 0%,#080c1a 100%)"}}>
-          <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
-            <h2 className="text-white font-semibold text-sm">Alerts Feed</h2>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"/>
-              <span className="text-red-400 text-xs font-semibold">Live</span>
-            </div>
-          </div>
-          <div className="divide-y divide-white/5">
-            {filtered.map(alert=>{
-              const c=levelColors[alert.level]||levelColors.low;
-              return (
-                <div key={alert.id} className={`flex items-center gap-4 px-5 py-4 hover:bg-white/3 transition-colors group ${c.bg}`}>
-                  <div className={`w-2 h-2 rounded-full flex-shrink-0 ${c.dot}`}/>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-1.5">
-                      <span className="text-white text-sm font-semibold">{alert.location}</span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.badge}`}>{alert.type}</span>
-                    </div>
-                    <div className="max-w-xs"><DensityBar value={alert.density}/></div>
-                  </div>
-                  <div className="flex items-center gap-4 flex-shrink-0">
-                    <span className={`text-2xl font-black ${c.text}`}>{alert.density}%</span>
-                    <span className="text-slate-600 text-xs">{alert.time}</span>
-                    <button className="p-2 rounded-lg bg-white/5 text-slate-500 hover:text-white opacity-0 group-hover:opacity-100 transition-all"><Eye size={14}/></button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+    <div className="space-y-6 animate-fadeIn">
+      <div>
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Alerts</h2>
+        <p className="text-slate-500 text-xs mt-1">Real-time safety alerts and structural density warnings</p>
       </div>
-    </PageWrapper>
+
+      {/* FILTER TABS */}
+      <div className="flex border-b border-slate-200 gap-2 overflow-x-auto">
+        {['all', 'critical', 'high', 'moderate', 'low'].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-5 py-2.5 font-semibold text-xs uppercase tracking-wider border-b-2 transition-all whitespace-nowrap ${
+              activeTab === tab 
+                ? 'border-blue-600 text-blue-600 font-bold' 
+                : 'border-transparent text-slate-400 hover:text-slate-600'
+            }`}
+          >
+            {tab === 'all' ? 'All Alerts' : `${tab} logs`}
+          </button>
+        ))}
+      </div>
+
+      {/* ALERTS LOG STREAM */}
+      <div className="space-y-3">
+        {filteredAlerts.map((alert) => {
+          const styles = getStyle(alert.type);
+          return (
+            <div key={alert.id} className={`p-4 bg-white border rounded-xl flex items-center justify-between shadow-sm transition-all hover:translate-x-1 ${styles.bg}`}>
+              <div className="flex items-center gap-4">
+                <div className={`w-2.5 h-2.5 rounded-full ${styles.badge} animate-pulse`}></div>
+                <div>
+                  <h4 className="font-bold text-sm text-slate-900">{alert.location}</h4>
+                  <p className="text-xs text-slate-500 mt-0.5">{alert.status}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-6">
+                <span className="text-xs font-semibold text-slate-400 font-mono">{alert.time}</span>
+                <span className={`text-xs font-black px-3 py-1 rounded-lg ${styles.badge}`}>{alert.level}</span>
+                <button className="text-slate-400 hover:text-slate-600 transition-all">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

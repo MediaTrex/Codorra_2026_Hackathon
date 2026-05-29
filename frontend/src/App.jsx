@@ -1,43 +1,48 @@
-import { useState } from "react";
-import Sidebar from "./components/Sidebar";
-import Dashboard from "./Pages/Dashboard";
-import LiveMonitoring from "./Pages/LiveMonitoring";
-import Heatmap from "./Pages/Heatmap";
-import Analytics from "./Pages/Analytics";
-import Alerts from "./Pages/Alerts";
-import Reports from "./pages/Reports";
-import Settings from "./Pages/Settings";
-import Login from "./Pages/Login";
+import React, { useState } from 'react';
+import Layout from './components/Layout';
+import Dashboard from './Pages/Dashboard';
+import Livemonitoring from './Pages/Livemonitoring';
+import Heatmap from './Pages/Heatmap';
+import Analytics from './Pages/Analytics';
+
+// Fallback module wrappers for ancillary settings screens
+const ConfigurationPlaceholder = ({ label }) => (
+  <div className="p-8 bg-white border border-slate-100 rounded-2xl shadow-sm max-w-xl">
+    <h3 className="text-base font-bold text-slate-800">{label} Portal</h3>
+    <p className="text-xs text-slate-400 mt-1">Component placeholder matching project layout modules.</p>
+    <div className="mt-6 p-4 bg-slate-50 border border-dashed rounded-xl text-[11px] font-mono text-slate-500">
+      SYSTEM_STATE: "READY_FOR_INTEGRATION"
+    </div>
+  </div>
+);
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [activePage, setActivePage] = useState("dashboard");
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [currentPageId, setCurrentPageId] = useState('dashboard');
 
-  if (!isLoggedIn) return <Login onLogin={() => setIsLoggedIn(true)} />;
-
-  const pages = {
-    dashboard: <Dashboard />,
-    monitoring: <LiveMonitoring />,
-    heatmap: <Heatmap />,
-    analytics: <Analytics />,
-    alerts: <Alerts />,
-    reports: <Reports />,
-    settings: <Settings />,
+  const executeViewRouting = () => {
+    switch (currentPageId) {
+      case 'dashboard':
+        return <Dashboard />;
+      case 'live-monitoring':
+        return <Livemonitoring />;
+      case 'heatmap':
+        return <Heatmap />;
+      case 'analytics':
+        return <Analytics />;
+      case 'alerts':
+        return <ConfigurationPlaceholder label="System Emergency Alerts Log" />;
+      case 'reports':
+        return <ConfigurationPlaceholder label="Analytical PDF Summary Reports" />;
+      case 'settings':
+        return <ConfigurationPlaceholder label="Global Core Privacy Configuration Settings" />;
+      default:
+        return <Dashboard />;
+    }
   };
 
   return (
-    <div className="flex h-screen bg-[#05070f] overflow-hidden">
-      <Sidebar
-        activePage={activePage}
-        setActivePage={setActivePage}
-        collapsed={sidebarCollapsed}
-        setCollapsed={setSidebarCollapsed}
-        onLogout={() => setIsLoggedIn(false)}
-      />
-      <main className={`flex-1 overflow-y-auto transition-all duration-300 ${sidebarCollapsed ? "ml-16" : "ml-64"}`}>
-        {pages[activePage] || <Dashboard />}
-      </main>
-    </div>
+    <Layout activePage={currentPageId} setActivePage={setCurrentPageId}>
+      {executeViewRouting()}
+    </Layout>
   );
 }

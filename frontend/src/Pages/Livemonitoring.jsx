@@ -1,69 +1,84 @@
-import { useState } from "react";
-import { mockData } from "../services/api";
-import { TopBar, DensityBadge, DensityBar, PageWrapper } from "../components/UI";
-import { Grid2X2, List } from "lucide-react";
+import React from 'react';
 
-const FEEDS = mockData.locations.map((l,i)=>({
-  ...l,
-  isLive: i < 4,
-  image: `https://picsum.photos/seed/crowd${i+1}/400/220`,
-}));
-
-export default function LiveMonitoring() {
-  const [location, setLocation] = useState("All Locations");
-  const [view, setView]         = useState("grid");
+export default function Livemonitoring() {
+  const videoStreams = [
+    { zone: "City Mall Entrance", rate: "85%", status: "Critical", style: "danger" },
+    { zone: "Metro Station Gate", rate: "74%", status: "High", style: "warning" },
+    { zone: "Bus Stand Platform", rate: "58%", status: "Moderate", style: "neutral" },
+    { zone: "Park Entrance", rate: "32%", status: "Low", style: "success" },
+    { zone: "College Campus", rate: "46%", status: "Moderate", style: "neutral" },
+    { zone: "Railway Station", rate: "67%", status: "High", style: "warning" },
+  ];
 
   return (
-    <PageWrapper>
-      <TopBar title="Live Monitoring" subtitle="Real-time camera feeds with privacy protection"/>
-      <div className="p-8 space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <select value={location} onChange={e=>setLocation(e.target.value)}
-              className="bg-white/5 border border-white/10 text-slate-300 text-sm rounded-xl px-4 py-2 focus:outline-none focus:border-cyan-500/40">
-              <option>All Locations</option>
-              {FEEDS.map(f=><option key={f.id}>{f.name}</option>)}
-            </select>
-            <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-green-500/15 border border-green-500/20">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"/>
-              <span className="text-green-400 text-xs font-semibold">Live</span>
-            </div>
-          </div>
-          <div className="flex gap-1 bg-white/5 rounded-xl p-1 border border-white/8">
-            <button onClick={()=>setView("grid")} className={`p-2 rounded-lg transition-colors ${view==="grid"?"bg-cyan-500/20 text-cyan-400":"text-slate-500 hover:text-white"}`}><Grid2X2 size={16}/></button>
-            <button onClick={()=>setView("list")} className={`p-2 rounded-lg transition-colors ${view==="list"?"bg-cyan-500/20 text-cyan-400":"text-slate-500 hover:text-white"}`}><List size={16}/></button>
-          </div>
+    <div className="space-y-6 animate-fadeIn">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Live Monitoring</h2>
+          <p className="text-slate-500 text-xs mt-1">Real-time camera feeds with privacy protection hashing</p>
         </div>
-
-        <div className="grid grid-cols-3 gap-4">
-          {FEEDS.map(feed=>(
-            <div key={feed.id} className="rounded-2xl overflow-hidden border border-white/8 group hover:border-cyan-500/30 transition-all duration-300"
-              style={{background:"linear-gradient(135deg,#0d1225 0%,#080c1a 100%)"}}>
-              <div className="relative h-44 overflow-hidden bg-slate-900">
-                <img src={feed.image} alt={feed.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300"/>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"/>
-                <div className="absolute top-2 left-2">
-                  {feed.isLive
-                    ? <div className="flex items-center gap-1 bg-red-500/90 backdrop-blur-sm px-2 py-0.5 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"/><span className="text-white text-[10px] font-bold">LIVE</span></div>
-                    : <div className="flex items-center gap-1 bg-slate-700/90 backdrop-blur-sm px-2 py-0.5 rounded-full"><span className="text-slate-400 text-[10px] font-bold">OFFLINE</span></div>
-                  }
-                </div>
-                <div className="absolute bottom-2 right-2">
-                  <div className={`text-2xl font-black ${feed.density>=80?"text-red-400":feed.density>=60?"text-orange-400":feed.density>=30?"text-yellow-400":"text-green-400"}`}
-                    style={{textShadow:"0 0 20px currentColor"}}>{feed.density}%</div>
-                </div>
-              </div>
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-white text-sm font-semibold">{feed.name}</span>
-                  <DensityBadge value={feed.density}/>
-                </div>
-                <DensityBar value={feed.density}/>
-              </div>
-            </div>
-          ))}
+        
+        <div className="flex items-center gap-3">
+          <select className="bg-white border border-slate-200 px-4 py-2 rounded-xl text-xs font-semibold focus:outline-none focus:border-blue-500 text-slate-600 shadow-sm">
+            <option>All Locations</option>
+          </select>
+          <div className="bg-emerald-50 text-emerald-700 px-3 py-2 rounded-xl text-xs font-bold border border-emerald-200 flex items-center gap-2 shadow-sm">
+            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span> Live
+          </div>
         </div>
       </div>
-    </PageWrapper>
+
+      {/* CAMERA GRID MOCK */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {videoStreams.map((feed, key) => (
+          <div key={key} className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm flex flex-col justify-between">
+            {/* FEED CONTAINER GRAPHIC */}
+            <div className="aspect-video bg-slate-900 relative flex items-center justify-center overflow-hidden">
+              {/* Grid matrix to look like a camera screen mapping crowds */}
+              <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+              
+              {/* SIMULATED MACHINE LEARNING DETECTIONS BOUNDING BOX OVERLAYS */}
+              <div className="absolute top-1/3 left-1/4 w-8 h-16 border-2 border-blue-400 rounded bg-blue-400/20 flex flex-col justify-between p-0.5">
+                <span className="text-[6px] text-white font-black bg-blue-500 px-0.5 py-px rounded-sm self-start leading-none">94%</span>
+              </div>
+              <div className="absolute top-1/4 right-1/3 w-10 h-20 border-2 border-emerald-400 rounded bg-emerald-400/20 flex flex-col justify-between p-0.5">
+                <span className="text-[6px] text-white font-black bg-emerald-500 px-0.5 py-px rounded-sm self-start leading-none">98%</span>
+              </div>
+              <div className="absolute bottom-1/4 right-1/4 w-7 h-14 border-2 border-orange-400 rounded bg-orange-400/20 flex flex-col justify-between p-0.5">
+                <span className="text-[6px] text-white font-black bg-orange-500 px-0.5 py-px rounded-sm self-start leading-none">89%</span>
+              </div>
+
+              {/* WATERMARK STATUS SYSTEM TICKER */}
+              <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-md text-[9px] font-mono font-bold text-white tracking-widest flex items-center gap-1.5">
+                <span className={`w-1.5 h-1.5 rounded-full ${feed.style === 'danger' ? 'bg-red-500 animate-pulse' : 'bg-emerald-400'}`}></span>
+                CAM-00{key + 1} // REC
+              </div>
+
+              <span className="text-[11px] text-slate-500 font-mono tracking-wider font-semibold z-10 bg-slate-950/40 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/5">Video Stream Context Node</span>
+            </div>
+
+            {/* LOWER FEED INFORMATION FOOTER */}
+            <div className="p-4 flex items-center justify-between border-t border-slate-50">
+              <div>
+                <h4 className="font-bold text-slate-800 text-xs">{feed.zone}</h4>
+                <div className="flex items-center gap-1.5 mt-1">
+                  <span className={`w-1.5 h-1.5 rounded-full ${
+                    feed.style === 'danger' ? 'bg-red-500' :
+                    feed.style === 'warning' ? 'bg-orange-500' :
+                    feed.style === 'success' ? 'bg-emerald-500' : 'bg-blue-500'
+                  }`}></span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{feed.status}</span>
+                </div>
+              </div>
+              <span className={`text-sm font-black px-2.5 py-1 rounded-xl ${
+                feed.style === 'danger' ? 'bg-red-50 text-red-600' :
+                feed.style === 'warning' ? 'bg-orange-50 text-orange-600' :
+                feed.style === 'success' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'
+              }`}>{feed.rate}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

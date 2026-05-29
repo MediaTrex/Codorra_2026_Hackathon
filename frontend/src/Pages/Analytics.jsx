@@ -1,135 +1,98 @@
-import { useState } from "react";
-import { TopBar, SectionCard, PageWrapper } from "../components/UI";
-import { mockData } from "../services/api";
-
-function LineChart({ data }) {
-  const max=Math.max(...data.map(d=>d.value));
-  const w=600,h=140,pad=20;
-  const pts=data.map((d,i)=>({
-    x: pad+(i/(data.length-1))*(w-pad*2),
-    y: h-pad-((d.value/max)*(h-pad*2)),
-  }));
-  const path=pts.map((p,i)=>`${i===0?"M":"L"} ${p.x} ${p.y}`).join(" ");
-  const area=path+` L ${pts[pts.length-1].x} ${h} L ${pts[0].x} ${h} Z`;
-  return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="w-full" style={{height:140}}>
-      <defs>
-        <linearGradient id="lg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.3"/>
-          <stop offset="100%" stopColor="#06b6d4" stopOpacity="0"/>
-        </linearGradient>
-      </defs>
-      {[0,25,50,75,100].map(v=>{
-        const y=h-pad-((v/100)*(h-pad*2));
-        return <line key={v} x1={pad} y1={y} x2={w-pad} y2={y} stroke="rgba(255,255,255,0.05)" strokeWidth="1"/>;
-      })}
-      <path d={area} fill="url(#lg)"/>
-      <path d={path} fill="none" stroke="#06b6d4" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{filter:"drop-shadow(0 0 6px #06b6d4)"}}/>
-      {pts.map((p,i)=>(
-        <g key={i}>
-          <circle cx={p.x} cy={p.y} r="4" fill="#06b6d4" stroke="#080c1a" strokeWidth="2" style={{filter:"drop-shadow(0 0 4px #06b6d4)"}}/>
-          <text x={p.x} y={h-2} fill="rgba(255,255,255,0.3)" fontSize="8" textAnchor="middle">{data[i].date}</text>
-        </g>
-      ))}
-    </svg>
-  );
-}
-
-function MiniDonut({ data }) {
-  const total=data.reduce((s,d)=>s+d.value,0);
-  let offset=0;
-  const r=45,cx=55,cy=55,stroke=14,circ=2*Math.PI*r;
-  return (
-    <svg width="110" height="110" viewBox="0 0 110 110">
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth={stroke}/>
-      {data.map((d,i)=>{
-        const dash=(d.value/total)*circ;
-        const el=<circle key={i} cx={cx} cy={cy} r={r} fill="none" stroke={d.color} strokeWidth={stroke}
-          strokeDasharray={`${dash} ${circ-dash}`} strokeDashoffset={-offset}
-          style={{transform:"rotate(-90deg)",transformOrigin:"55px 55px",filter:`drop-shadow(0 0 4px ${d.color}60)`}}/>;
-        offset+=dash; return el;
-      })}
-      <text x={cx} y={cy-4} textAnchor="middle" fill="white" fontSize="14" fontWeight="700">24</text>
-      <text x={cx} y={cy+10} textAnchor="middle" fill="#64748b" fontSize="7">Total</text>
-    </svg>
-  );
-}
+import React from 'react';
 
 export default function Analytics() {
-  const [range, setRange] = useState("Last 7 Days");
-  const { analyticsData } = mockData;
-
-  const topLocations = [
-    {name:"City Mall",       value:86, color:"#ef4444"},
-    {name:"Metro Station",   value:74, color:"#f97316"},
-    {name:"Railway Station", value:67, color:"#f97316"},
-    {name:"Bus Stand",       value:58, color:"#f59e0b"},
-    {name:"Park Zone",       value:32, color:"#22c55e"},
-  ];
-
-  const statCards = [
-    {label:"Total People Count",  value:"125,430", change:"↑ 18.6%", pos:true },
-    {label:"Peak Density",        value:"92%",     change:"↑ 5%",    pos:true },
-    {label:"Avg Daily Density",   value:"63%",     change:"↑ 7%",    pos:false},
-    {label:"Total Alerts",        value:"36",      change:"↓ 12%",   pos:true },
+  const analyticsMetrics = [
+    { name: "Total People Count", sum: "125,430", flag: "↑ 18.4%", mode: "success" },
+    { name: "Peak Density Index", sum: "92%", flag: "↑ 5%", mode: "danger" },
+    { name: "Avg Daily Density", sum: "63%", flag: "↓ 1%", mode: "warning" },
+    { name: "Total Alerts Issued", sum: "36", flag: "↑ 12%", mode: "success" },
   ];
 
   return (
-    <PageWrapper>
-      <TopBar title="Analytics Overview" subtitle="Detailed insights and trends"/>
-      <div className="p-8 space-y-6">
-        <div className="flex justify-end">
-          <select value={range} onChange={e=>setRange(e.target.value)}
-            className="bg-white/5 border border-white/10 text-slate-300 text-sm rounded-xl px-4 py-2 focus:outline-none focus:border-cyan-500/40">
-            {["Last 7 Days","Last 30 Days","Last 90 Days"].map(r=><option key={r}>{r}</option>)}
-          </select>
+    <div className="space-y-6 animate-fadeIn">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Analytics Overview</h2>
+          <p className="text-slate-500 text-xs mt-1">Detailed insights, trends, and historic processing validation</p>
         </div>
+        <button className="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-bold shadow-sm">
+          Last 7 Days ▼
+        </button>
+      </div>
 
-        <div className="grid grid-cols-4 gap-4">
-          {statCards.map((s,i)=>(
-            <div key={i} className="rounded-2xl border border-white/8 p-5 hover:border-white/15 transition-all" style={{background:"linear-gradient(135deg,#0d1225 0%,#080c1a 100%)"}}>
-              <div className="text-slate-500 text-xs font-medium mb-2 uppercase tracking-wide">{s.label}</div>
-              <div className="text-white font-bold text-2xl">{s.value}</div>
-              <div className={`text-xs mt-1 ${s.pos?"text-green-400":"text-red-400"}`}>{s.change}</div>
+      {/* METRIC SUMMARIES */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {analyticsMetrics.map((card, index) => (
+          <div key={index} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-1.5">
+            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{card.name}</p>
+            <div className="flex items-baseline justify-between">
+              <h3 className="text-2xl font-black text-slate-800 tracking-tight">{card.sum}</h3>
+              <span className={`text-xs font-extrabold ${card.mode === 'success' ? 'text-emerald-500' : 'text-red-500'}`}>{card.flag}</span>
             </div>
-          ))}
+          </div>
+        ))}
+      </div>
+
+      {/* GRAPH CHART INFRASTRUCTURE */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* LINE GRAPH REPRESENTATION */}
+        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+          <div>
+            <h4 className="font-bold text-slate-800 text-sm">Density Trend Lines</h4>
+            <p className="text-[11px] text-slate-400">Aggregated volumetric flow over specified times</p>
+          </div>
+          
+          {/* SIMULATED COMPONENT GRAPH TIMELINE VIA SECURE CRISP SVGS */}
+          <div className="h-56 my-4 w-full flex items-end">
+            <svg className="w-full h-full" viewBox="0 0 400 120" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2"/>
+                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0"/>
+                </linearGradient>
+              </defs>
+              <path d="M 0 80 Q 50 20 100 60 T 200 40 T 300 90 T 400 30" fill="none" stroke="#3b82f6" strokeWidth="3" strokeLinecap="round" />
+              <path d="M 0 80 Q 50 20 100 60 T 200 40 T 300 90 T 400 30 L 400 120 L 0 120 Z" fill="url(#chartGrad)" />
+            </svg>
+          </div>
+
+          <div className="flex justify-between text-[10px] font-bold text-slate-400 font-mono border-t pt-3">
+            <span>12 MAY</span>
+            <span>14 MAY</span>
+            <span>16 MAY</span>
+            <span>18 MAY</span>
+            <span>20 MAY</span>
+          </div>
         </div>
 
-        <SectionCard title="Density Trend">
-          <LineChart data={analyticsData.densityTrend}/>
-        </SectionCard>
+        {/* TOP PERFORMING LOCATIONS BAR BLOCK */}
+        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+          <div>
+            <h4 className="font-bold text-slate-800 text-sm">Top Locations by Density</h4>
+            <p className="text-[11px] text-slate-400">Highest volume nodes evaluated</p>
+          </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <SectionCard title="Top Locations by Density">
-            <div className="space-y-3">
-              {topLocations.map((loc,i)=>(
-                <div key={i} className="flex items-center gap-3">
-                  <span className="text-slate-600 text-xs w-4">{i+1}</span>
-                  <span className="text-slate-400 text-sm flex-1">{loc.name}</span>
-                  <div className="w-24 bg-white/5 rounded-full h-1.5">
-                    <div className="h-full rounded-full transition-all duration-700" style={{width:`${loc.value}%`,backgroundColor:loc.color,boxShadow:`0 0 8px ${loc.color}80`}}/>
-                  </div>
-                  <span className="text-xs font-bold w-8 text-right" style={{color:loc.color}}>{loc.value}%</span>
+          <div className="space-y-3.5 pt-2">
+            {[
+              { location: "City Mall", metric: "85%", size: "w-[85%]", bg: "bg-red-500" },
+              { location: "Metro Station", metric: "74%", size: "w-[74%]", bg: "bg-orange-500" },
+              { location: "Railway Station", metric: "67%", size: "w-[67%]", bg: "bg-amber-500" },
+              { location: "Bus Stand", metric: "58%", size: "w-[58%]", bg: "bg-blue-500" },
+              { location: "Park Zone", metric: "32%", size: "w-[32%]", bg: "bg-emerald-500" },
+            ].map((bar, i) => (
+              <div key={i} className="space-y-1">
+                <div className="flex justify-between text-xs font-semibold">
+                  <span className="text-slate-600">{bar.location}</span>
+                  <span className="text-slate-800 font-bold">{bar.metric}</span>
                 </div>
-              ))}
-            </div>
-          </SectionCard>
-          <SectionCard title="Density by Category">
-            <div className="flex items-center gap-6">
-              <MiniDonut data={mockData.densityDistribution}/>
-              <div className="space-y-2">
-                {mockData.densityDistribution.map((d,i)=>(
-                  <div key={i} className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full" style={{backgroundColor:d.color,boxShadow:`0 0 6px ${d.color}`}}/>
-                    <span className="text-slate-400 text-xs">{d.label}</span>
-                    <span className="text-white text-xs font-bold ml-auto pl-6">{d.value}%</span>
-                  </div>
-                ))}
+                <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div className={`h-full rounded-full ${bar.bg} ${bar.size}`}></div>
+                </div>
               </div>
-            </div>
-          </SectionCard>
+            ))}
+          </div>
         </div>
       </div>
-    </PageWrapper>
+    </div>
   );
 }
