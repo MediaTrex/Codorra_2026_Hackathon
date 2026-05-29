@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from app.config.settings import get_settings
 from app.config.database import connect_to_mongo, close_mongo_connection
 from app.routes import auth_routes, camera_routes, detection_routes
-from app.routes import alert_routes, heatmap_routes
+from app.routes import alert_routes, heatmap_routes, analytics_routes, privacy_routes
 
 settings = get_settings()
 
@@ -39,6 +39,8 @@ app.include_router(camera_routes.router)
 app.include_router(detection_routes.router)
 app.include_router(alert_routes.router)
 app.include_router(heatmap_routes.router)
+app.include_router(analytics_routes.router)
+app.include_router(privacy_routes.router)
 
 @app.get("/")
 async def root():
@@ -60,3 +62,4 @@ async def health_check():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
