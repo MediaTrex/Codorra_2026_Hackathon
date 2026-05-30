@@ -140,6 +140,28 @@ flowchart LR
 **Potential Impact**: Deployable in malls, stadiums, transit hubs, and festivals worldwide — balancing safety and civil liberties.
 
 ---
+## 📸 Project Screenshots
+
+### CrowdGuard - Complete UI Overview
+
+<table>
+  <tr>
+    <td align="center"><img src="images/Login.jpeg" width="245" alt="Login"><br><strong>1. Login</strong></td>
+    <td align="center"><img src="images/Dashboard.jpeg" width="245" alt="Dashboard"><br><strong>2. Dashboard</strong></td>
+    <td align="center"><img src="images/Live_monitoring.jpeg" width="245" alt="Live Monitoring"><br><strong>3. Live Monitoring</strong></td>
+    <td align="center"><img src="images/heatmap.jpeg" width="245" alt="Heatmap"><br><strong>4. Heatmap</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="images/Analytics.jpeg" width="245" alt="Analytics"><br><strong>5. Analytics</strong></td>
+    <td align="center"><img src="images/Alerts.jpeg" width="245" alt="Alerts"><br><strong>6. Alerts</strong></td>
+    <td align="center"><img src="images/Reports.jpeg" width="245" alt="Reports"><br><strong>7. Reports</strong></td>
+    <td align="center"><img src="images/Settings.jpeg" width="245" alt="Settings"><br><strong>8. Settings</strong></td>
+  </tr>
+</table>
+
+<p align="center">
+  <em>Privacy-Preserving AI-Powered Crowd Monitoring System</em>
+</p>
 
 ## Demo & Conclusion
 
