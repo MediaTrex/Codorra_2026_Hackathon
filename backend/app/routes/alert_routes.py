@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, status, Depends, Path, Query
 from app.services.alert_service import AlertService
 from app.middleware.auth_middleware import get_current_user
+from app.config.database import get_collection
+from bson import ObjectId
 from app.schemas.alert_schema import (
     ResolveAlertRequest, AcknowledgeAlertRequest, DismissAlertRequest, 
     CreateAlertRequest, AlertResponse, AlertStatisticsResponse
@@ -141,4 +143,38 @@ async def bulk_resolve_alerts(
             detail=result.get("message")
         )
     return result
+
+
+@router.post("/", response_model=dict, status_code=status.HTTP_201_CREATED)
+async def create_alert(
+    payload: CreateAlertRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Create a new alert (from AI engine)"""
+    cameras_col = await get_collection("cameras")
+    camera = await cameras_col.find_one({"_id": ObjectId(payload.camera_id)}) if ObjectId.is_valid(payload.camera_id) else None
+    
+    camera_name = camera.get("name") if camera else "Unknown Camera"
+    location = camera.get("location") if camera else "Unknown Location"
+    
+    result = await AlertService.create_alert(
+        camera_id=payload.camera_id,
+        alert_type=payload.type,
+        severity=payload.severity,
+        title=payload.title,
+        message=payload.message,
+        people_count=payload.people_count,
+        density_percentage=payload.density_percentage,
+        camera_name=camera_name,
+        location=location,
+        frame_data=payload.frame_data
+    )
+    
+    if not result.get("success"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=result.get("message")
+        )
+    return result
+
 

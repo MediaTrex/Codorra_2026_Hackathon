@@ -45,6 +45,8 @@ class Settings(BaseSettings):
     DENSITY_MEDIUM: int = 60
     DENSITY_HIGH: int = 85
 
+    API_KEY: str = "codorra_ai_engine_secret_2026"
+
     class Config:
         env_file = ".env"
 

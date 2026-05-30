@@ -131,8 +131,10 @@ class DetectionService:
         try:
             detections_collection = await get_collection("density_logs")
             
+            query_id = ObjectId(camera_id) if ObjectId.is_valid(camera_id) else camera_id
+            
             detections = await detections_collection.find(
-                {"camera_id": camera_id}
+                {"camera_id": query_id}
             ).sort("timestamp", -1).limit(limit).to_list(None)
             
             return {
@@ -154,8 +156,10 @@ class DetectionService:
             # Get data from last N hours
             time_threshold = datetime.utcnow() - timedelta(hours=period_hours)
             
+            query_id = ObjectId(camera_id) if ObjectId.is_valid(camera_id) else camera_id
+            
             detections = await detections_collection.find({
-                "camera_id": camera_id,
+                "camera_id": query_id,
                 "timestamp": {"$gte": time_threshold}
             }).to_list(None)
             
