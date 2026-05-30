@@ -105,3 +105,7 @@
 2026-05-30 13:40:02,335 - ai-engine - INFO - DensityEstimator initialized with capacity: 100
 2026-05-30 13:40:02,336 - ai-engine - INFO - PeopleCounter module initialized
 2026-05-30 13:40:02,336 - ai-engine - INFO - PeopleCounter module initialized
+2026-05-30 13:46:08,148 - ai-engine - INFO - AI Engine API starting up
+2026-05-30 13:46:08,149 - ai-engine - INFO - BackendAPIClient initialized with base URL: http://localhost:8000
+2026-05-30 13:46:08,149 - ai-engine - INFO - AI Engine initialized
+2026-05-30 13:46:08,149 - ai-engine - INFO - AI Engine initialized successfully
