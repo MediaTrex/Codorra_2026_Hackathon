@@ -146,16 +146,16 @@ flowchart LR
 
 <table>
   <tr>
-    <td align="center"><img src="./docsimages/Login.jpeg" width="245" alt="Login"><br><strong>1. Login</strong></td>
-    <td align="center"><img src="./docsimages/Dashboard.jpeg" width="245" alt="Dashboard"><br><strong>2. Dashboard</strong></td>
-    <td align="center"><img src="./docsimages/Live_monitoring.jpeg" width="245" alt="Live Monitoring"><br><strong>3. Live Monitoring</strong></td>
-    <td align="center"><img src="./docsimages/heatmap.jpeg" width="245" alt="Heatmap"><br><strong>4. Heatmap</strong></td>
+    <td align="center"><img src="./docs/images/Login.jpeg" width="245" alt="Login"><br><strong>1. Login</strong></td>
+    <td align="center"><img src="./docs/images/Dashboard.jpeg" width="245" alt="Dashboard"><br><strong>2. Dashboard</strong></td>
+    <td align="center"><img src="./docs/images/Live_monitoring.jpeg" width="245" alt="Live Monitoring"><br><strong>3. Live Monitoring</strong></td>
+    <td align="center"><img src="./docs/images/heatmap.jpeg" width="245" alt="Heatmap"><br><strong>4. Heatmap</strong></td>
   </tr>
   <tr>
-    <td align="center"><img src="./docsimages/Analytics.jpeg" width="245" alt="Analytics"><br><strong>5. Analytics</strong></td>
-    <td align="center"><img src="./docsimages/Alerts.jpeg" width="245" alt="Alerts"><br><strong>6. Alerts</strong></td>
-    <td align="center"><img src="./docsimages/Reports.jpeg" width="245" alt="Reports"><br><strong>7. Reports</strong></td>
-    <td align="center"><img src="./docsimages/Settings.jpeg" width="245" alt="Settings"><br><strong>8. Settings</strong></td>
+    <td align="center"><img src="./docs/images/Analytics.jpeg" width="245" alt="Analytics"><br><strong>5. Analytics</strong></td>
+    <td align="center"><img src="./docs/images/Alerts.jpeg" width="245" alt="Alerts"><br><strong>6. Alerts</strong></td>
+    <td align="center"><img src="./docs/images/Reports.jpeg" width="245" alt="Reports"><br><strong>7. Reports</strong></td>
+    <td align="center"><img src="./docs/images/Settings.jpeg" width="245" alt="Settings"><br><strong>8. Settings</strong></td>
   </tr>
 </table>
 
