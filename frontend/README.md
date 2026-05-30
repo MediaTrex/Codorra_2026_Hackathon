@@ -1,20 +1,37 @@
-<<<<<<< HEAD
-# React + Vite
+# Codorra 2026 Hackathon - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend repository for the Codorra 2026 Hackathon project. It contains the code and resources for the user interface of our application.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+To get started with the frontend development, follow these steps:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/MediaTrex/Codorra_2026_Hackathon.git
+    ```
+2. Navigate to the project directory:
+    ```bash
+    cd frontend
+    ```
+3. Install the dependencies:
+    ```bash
+    npm install
+    ```
+4. Start the development server:
+    ```bash
+    npm start
+    ```
+This will launch the application in your default web browser at `http://localhost:3000`.
 
-## React Compiler
+## Technologies Used
+- React: A JavaScript library for building user interfaces.
+- Redux: A state management library for JavaScript applications.
+- Axios: A promise-based HTTP client for making API requests.
+- Material-UI: A popular React UI framework for building responsive and visually appealing interfaces.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# Codorra 2026 Hackathon
->>>>>>> acbfa2f407611405bb1bfac62dcc95f80eff0250
+## Contributing
+We welcome contributions to the frontend repository! If you would like to contribute, please follow these guidelines:
+1. Fork the repository and create a new branch for your feature or bug fix.
+2. Make your changes and commit them with descriptive messages.
+3. Push your changes to your forked repository.
+4. Create a pull request to the main repository, describing your changes and why they are necessary.
