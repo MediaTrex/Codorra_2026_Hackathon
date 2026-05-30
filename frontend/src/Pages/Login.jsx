@@ -378,7 +378,6 @@ export default function Login({ onLogin }) {
         onBlur={validate.loginEmail}
         error={touched.loginEmail ? errors.loginEmail : null}
         icon={Mail}
-        hint="Only @gmail.com accounts are accepted"
       />
 
       <InputField
@@ -451,7 +450,6 @@ export default function Login({ onLogin }) {
         onBlur={validate.signupName}
         error={touched.signupName ? errors.signupName : null}
         icon={User}
-        hint="Letters only, minimum 3 characters"
       />
 
       <InputField
@@ -463,7 +461,6 @@ export default function Login({ onLogin }) {
         onBlur={validate.signupEmail}
         error={touched.signupEmail ? errors.signupEmail : null}
         icon={Mail}
-        hint="Must be a valid @gmail.com address"
       />
 
       <div>
