@@ -7,8 +7,23 @@ from bson import ObjectId
 settings = get_settings()
 
 async def get_current_user(request: Request):
-    """Get current user from cookie"""
+    """Get current user from cookie or Authorization header"""
     token = request.cookies.get(settings.COOKIE_NAME)
+    
+    if not token:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]
+            
+            # Check if this is the pre-shared API Key for the AI engine
+            if token == settings.API_KEY:
+                return {
+                    "_id": ObjectId("507f1f77bcf86cd799439011"),
+                    "username": "ai_engine",
+                    "email": "ai_engine@system.local",
+                    "role": "admin",
+                    "is_active": True
+                }
     
     if not token:
         raise HTTPException(

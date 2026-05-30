@@ -11,13 +11,13 @@ async def connect_to_mongo():
     """Connect to MongoDB"""
     MongoDB.client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGODB_URL)
     MongoDB.db = MongoDB.client[settings.DATABASE_NAME]
-    print(f"✅ Connected to MongoDB: {settings.DATABASE_NAME}")
+    print(f"[OK] Connected to MongoDB: {settings.DATABASE_NAME}")
 
 async def close_mongo_connection():
     """Close MongoDB connection"""
     if MongoDB.client:
         MongoDB.client.close()
-        print("❌ Disconnected from MongoDB")
+        print("[X] Disconnected from MongoDB")
 
 def get_database():
     """Get MongoDB database instance"""
