@@ -1,0 +1,96 @@
+﻿from fastapi import APIRouter, HTTPException, status, Depends
+from app.schemas.camera_schema import (
+    CreateCameraRequest,
+    UpdateCameraRequest,
+    CameraListResponse,
+    CameraDetailResponse
+)
+from app.services.camera_service import CameraService
+from app.middleware.auth_middleware import get_current_user
+
+router = APIRouter(prefix="/api/cameras", tags=["Cameras"])
+
+@router.post("/", response_model=dict, status_code=status.HTTP_201_CREATED)
+async def create_camera(
+    camera_data: CreateCameraRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Create new camera"""
+    result = await CameraService.create_camera(camera_data, str(current_user.get("_id")))
+    
+    if not result.get("success"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=result.get("message")
+        )
+    
+    return result
+
+@router.get("/", response_model=dict, status_code=status.HTTP_200_OK)
+async def list_cameras(current_user: dict = Depends(get_current_user)):
+    """Get all cameras"""
+    result = await CameraService.get_all_cameras()
+    
+    if not result.get("success"):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=result.get("message")
+        )
+    
+    return {
+        "success": True,
+        "cameras": result.get("cameras", []),
+        "total": result.get("total", 0)
+    }
+
+@router.get("/{camera_id}", response_model=dict, status_code=status.HTTP_200_OK)
+async def get_camera(
+    camera_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get camera by ID"""
+    result = await CameraService.get_camera(camera_id)
+    
+    if not result.get("success"):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=result.get("message")
+        )
+    
+    return {
+        "success": True,
+        "camera": result.get("camera")
+    }
+
+@router.put("/{camera_id}", response_model=dict, status_code=status.HTTP_200_OK)
+async def update_camera(
+    camera_id: str,
+    update_data: UpdateCameraRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Update camera"""
+    result = await CameraService.update_camera(camera_id, update_data)
+    
+    if not result.get("success"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=result.get("message")
+        )
+    
+    return result
+
+@router.delete("/{camera_id}", response_model=dict, status_code=status.HTTP_200_OK)
+async def delete_camera(
+    camera_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Delete camera"""
+    result = await CameraService.delete_camera(camera_id)
+    
+    if not result.get("success"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=result.get("message")
+        )
+    
+    return result
