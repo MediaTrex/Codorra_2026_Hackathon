@@ -79,13 +79,17 @@ Modern smart cities face a critical tension — **mass surveillance for public s
 - **Real-Time & Actionable**: Heatmaps + alerts for unsafe conditions.
 - **Ethical AI**: Fully auditable, transparent, and compliant with privacy best practices.
 
-### Project Demo
+---
+
+---
+## Project Demo
 
 ![UI Walkthrough](./docs/images/CrowdGuard.gif)
 
-### Live Demo
+## Live Demo
 
-**[CrowdGuard Demo](https://drive.google.com/file/d/18k31h3aEPSvc5uT7_2tIN_J6h4u0wNKg/view?usp=sharing)**
+[CrowdGuard Demo Video link](https://drive.google.com/file/d/18k31h3aEPSvc5uT7_2tIN_J6h4u0wNKg/view?usp=sharing)
+
 ---
 
 ## Tech Stack & Reasoning
@@ -143,6 +147,15 @@ flowchart LR
     classDef privacy fill:#10b981,stroke:#047857,color:white,rx:15,ry:15
     class PP privacy
 
+```
+### Overview:
+
+```mermaid
+graph TD
+    A[AI Engine] -->|Sends data| B[Backend API]
+    B -->|Stores data| C[MongoDB]
+    B -->|Provides data| D[React Dashboard]
+    E[Video Processing] -->|Sends analytics| B
 ```
     
 **Workflow**:
