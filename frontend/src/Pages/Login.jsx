@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { Shield, Eye, EyeOff, Mail, Lock, User, CheckCircle, AlertCircle, Loader2, ArrowRight } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import { api } from "../Services/api";
 
-// ── Validation helpers ────────────────────────────────────────────────────────
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+// ── Validation helpers
 const validators = {
   email: (v) => {
     if (!v) return "Email is required";
@@ -114,44 +118,10 @@ function Toast({ message, type }) {
   );
 }
 
-// ── API calls ─────────────────────────────────────────────────────────────────
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
-
-async function apiLogin(email, password) {
-  const res = await fetch(`${BASE_URL}/api/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.detail || "Login failed");
-  return data;
-}
-
-async function apiSignup(name, email, password) {
-  const res = await fetch(`${BASE_URL}/api/auth/signup`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, password }),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.detail || "Signup failed");
-  return data;
-}
-
-async function apiForgotPassword(email) {
-  const res = await fetch(`${BASE_URL}/api/auth/forgot-password`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.detail || "Failed to send reset email");
-  return data;
-}
-
 // ── Main Login Component ──────────────────────────────────────────────────────
-export default function Login({ onLogin }) {
+export default function Login() {
+  const { login: authLogin, signup: authSignup } = useAuth();
+
   const [tab, setTab] = useState("login");
 
   // login fields
@@ -199,46 +169,6 @@ export default function Login({ onLogin }) {
     forgotEmail:    () => { touch("forgotEmail");    setErrors(e => ({...e, forgotEmail:    validators.email(forgotEmail)})); },
   };
 
-  // ── Google OAuth ────────────────────────────────────────────────────────────
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      setLoading(true);
-      try {
-        const userInfo = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-        }).then(r => r.json());
-
-        if (!userInfo.email.endsWith("@gmail.com")) {
-          showToast("Only @gmail.com accounts are allowed", "error");
-          setLoading(false);
-          return;
-        }
-
-        const res = await fetch(`${BASE_URL}/api/auth/google`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email:     userInfo.email,
-            name:      userInfo.name,
-            picture:   userInfo.picture,
-            google_id: userInfo.sub,
-          }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || "Google login failed");
-
-        sessionStorage.setItem("cg_token", data.access_token);
-        showToast(`Welcome, ${userInfo.name}! 👋`, "success");
-        setTimeout(() => onLogin(data.user), 800);
-      } catch (err) {
-        showToast(err.message, "error");
-      } finally {
-        setLoading(false);
-      }
-    },
-    onError: () => showToast("Google login failed. Try again.", "error"),
-  });
-
   // ── Login submit ────────────────────────────────────────────────────────────
   const handleLogin = async () => {
     const emailErr = validators.email(loginEmail);
@@ -249,10 +179,8 @@ export default function Login({ onLogin }) {
 
     setLoading(true);
     try {
-      const data = await apiLogin(loginEmail, loginPassword);
-      sessionStorage.setItem("cg_token", data.access_token);
-      showToast(`Welcome back, ${data.user?.name || "Admin"}! 👋`, "success");
-      setTimeout(() => onLogin(data.user), 800);
+      await authLogin(loginEmail, loginPassword);
+      showToast("Login successful!", "success");
     } catch (err) {
       showToast(err.message, "error");
     } finally {
@@ -275,10 +203,8 @@ export default function Login({ onLogin }) {
 
     setLoading(true);
     try {
-      const data = await apiSignup(signupName, signupEmail, signupPassword);
-      sessionStorage.setItem("cg_token", data.access_token);
-      showToast("Account created successfully! 🎉", "success");
-      setTimeout(() => onLogin(data.user), 800);
+      await authSignup(signupName, signupEmail, signupPassword);
+      showToast("Account created successfully!", "success");
     } catch (err) {
       showToast(err.message, "error");
     } finally {
@@ -295,9 +221,9 @@ export default function Login({ onLogin }) {
 
     setLoading(true);
     try {
-      await apiForgotPassword(forgotEmail);
+      // Forgot password not implemented in backend - show info
+      showToast("Password reset functionality coming soon.", "info");
       setForgotSent(true);
-      showToast("Reset link sent! Check your Gmail inbox.", "success");
     } catch (err) {
       showToast(err.message, "error");
     } finally {
@@ -421,7 +347,7 @@ export default function Login({ onLogin }) {
       </div>
 
       <button
-        onClick={() => googleLogin()}
+        onClick={() => alert("Google OAuth coming soon!")}
         disabled={loading}
         className="w-full flex items-center justify-center gap-3 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:border-white/20 text-sm font-semibold transition-all duration-200 disabled:opacity-50"
       >

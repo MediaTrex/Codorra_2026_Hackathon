@@ -1,62 +1,147 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
-
-async function request(path, options = {}) {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { "Content-Type": "application/json", ...options.headers },
-    ...options,
-  });
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
-  return res.json();
-}
+import { apiClient } from "./apiClient";
 
 export const api = {
-  getDashboardStats: () => request("/api/dashboard/stats"),
-  getRecentAlerts:   () => request("/api/alerts/recent"),
-  getLiveFeeds:      () => request("/api/feeds/live"),
-  getHeatmapData:    (date = "today") => request(`/api/heatmap?date=${date}`),
-  getAnalytics:      (range = "7d")   => request(`/api/analytics?range=${range}`),
-  getAlerts:         (filter = "all") => request(`/api/alerts?filter=${filter}`),
-  dismissAlert:      (id) => request(`/api/alerts/${id}/dismiss`, { method: "PUT" }),
-  getReports:        (s, e, l) => request(`/api/reports?start=${s}&end=${e}&location=${l}`),
-  downloadReport:    (id) => `${BASE_URL}/api/reports/${id}/download`,
-  getSettings:       () => request("/api/settings"),
-  updateSettings:    (data) => request("/api/settings", { method: "PUT", body: JSON.stringify(data) }),
-  login:             (email, password) => request("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
-  signup:            (data) => request("/api/auth/signup", { method: "POST", body: JSON.stringify(data) }),
-  logout:            () => request("/api/auth/logout", { method: "POST" }),
+  // ── Auth ─────────────────────────────────────────────────────────────────────
+  login: (email, password) =>
+    apiClient.post("/api/auth/login", { email, password }),
+
+  register: (name, email, password, role = "user") =>
+    apiClient.post("/api/auth/register", { name, email, password, role }),
+
+  logout: () => apiClient.post("/api/auth/logout"),
+
+  me: () => apiClient.get("/api/auth/me"),
+
+  // ── Cameras ───────────────────────────────────────────────────────────────────
+  listCameras: (params = {}) =>
+    apiClient.get("/api/cameras/", { params }),
+
+  getCamera: (id) =>
+    apiClient.get(`/api/cameras/${id}`),
+
+  createCamera: (data) =>
+    apiClient.post("/api/cameras/", data),
+
+  updateCamera: (id, data) =>
+    apiClient.put(`/api/cameras/${id}`, data),
+
+  deleteCamera: (id) =>
+    apiClient.delete(`/api/cameras/${id}`),
+
+  // ── Detections ───────────────────────────────────────────────────────────────
+  getLiveDetections: () =>
+    apiClient.get("/api/detections/live"),
+
+  getDetectionHistory: (cameraId, limit = 50) =>
+    apiClient.get(`/api/detections/${cameraId}/history`, { params: { limit } }),
+
+  getDetectionTrends: (cameraId, hours = 24) =>
+    apiClient.get(`/api/detections/${cameraId}/trends`, { params: { hours } }),
+
+  createDetection: (data) =>
+    apiClient.post("/api/detections/", data),
+
+  // ── Alerts ───────────────────────────────────────────────────────────────────
+  getAlerts: ({ status, severity, camera_id, limit = 50, skip = 0 } = {}) =>
+    apiClient.get("/api/alerts/", {
+      params: { status, severity, camera_id, limit, skip },
+    }),
+
+  getAlertStats: (period_hours = 24) =>
+    apiClient.get("/api/alerts/statistics", { params: { period_hours } }),
+
+  getAlert: (id) =>
+    apiClient.get(`/api/alerts/${id}`),
+
+  resolveAlert: (id, note) =>
+    apiClient.post(`/api/alerts/${id}/resolve`, { note, resolution_status: "resolved" }),
+
+  acknowledgeAlert: (id, note) =>
+    apiClient.post(`/api/alerts/${id}/acknowledge`, { note }),
+
+  dismissAlert: (id, reason) =>
+    apiClient.post(`/api/alerts/${id}/dismiss`, { reason }),
+
+  bulkResolveAlerts: (alertIds, note) =>
+    apiClient.post(`/api/alerts/bulk/resolve?note=${encodeURIComponent(note || "")}`, { alert_ids: alertIds }),
+
+  // ── Heatmap ──────────────────────────────────────────────────────────────────
+  getHeatmapData: ({ period_hours = 1, camera_ids } = {}) =>
+    apiClient.get("/api/heatmap/data", {
+      params: { period_hours, camera_ids },
+    }),
+
+  getHeatmapSummary: (period_hours = 24) =>
+    apiClient.get("/api/heatmap/summary", { params: { period_hours } }),
+
+  getHeatmapZonesRisk: (period_hours = 24) =>
+    apiClient.get("/api/heatmap/zones/risk", { params: { period_hours } }),
+
+  getHeatmapCameraHistory: (cameraId, period_hours = 24) =>
+    apiClient.get(`/api/heatmap/camera/${cameraId}/history`, { params: { period_hours } }),
+
+  getHeatmapCameraTrends: (cameraId, period_hours = 24, interval_minutes = 60) =>
+    apiClient.get(`/api/heatmap/camera/${cameraId}/trends`, { params: { period_hours, interval_minutes } }),
+
+  getHeatmapStatsLive: () =>
+    apiClient.get("/api/heatmap/stats/live"),
+
+  // ── Analytics ─────────────────────────────────────────────────────────────────
+  getSystemAnalytics: (period_hours = 24) =>
+    apiClient.get("/api/analytics/system", { params: { period_hours } }),
+
+  getCameraAnalytics: (cameraId, period_hours = 24) =>
+    apiClient.get(`/api/analytics/camera/${cameraId}`, { params: { period_hours } }),
+
+  getTemporalAnalytics: (period_hours = 24, granularity = "hourly", camera_id) =>
+    apiClient.get("/api/analytics/temporal", {
+      params: { period_hours, granularity, camera_id },
+    }),
+
+  compareCameras: (cameraId1, cameraId2, period_hours = 24) =>
+    apiClient.get("/api/analytics/compare", {
+      params: { camera_id1: cameraId1, camera_id2: cameraId2, period_hours },
+    }),
+
+  getAlertAnalytics: (period_hours = 24) =>
+    apiClient.get("/api/analytics/alerts", { params: { period_hours } }),
+
+  // ── Privacy ───────────────────────────────────────────────────────────────────
+  getComplianceReport: (report_period = "monthly") =>
+    apiClient.get("/api/privacy/compliance/report", { params: { report_period } }),
+
+  getDataRetentionPolicy: () =>
+    apiClient.get("/api/privacy/data-retention/policy"),
+
+  getAuditLogs: (user_id, limit = 100, skip = 0) =>
+    apiClient.get("/api/privacy/audit-logs", { params: { user_id, limit, skip } }),
+
+  getAccessLogs: (endpoint, period_hours = 24, limit = 100) =>
+    apiClient.get("/api/privacy/access-logs", { params: { endpoint, period_hours, limit } }),
+
+  getAnonymizationStatus: () =>
+    apiClient.get("/api/privacy/anonymization/status"),
+
+  exportUserData: () =>
+    apiClient.post("/api/privacy/data/export"),
+
+  requestDataDeletion: (reason) =>
+    apiClient.post(`/api/privacy/data/deletion?reason=${encodeURIComponent(reason || "")}`),
+
+  getEncryptionConfig: () =>
+    apiClient.get("/api/privacy/encryption/config"),
+
+  getAccessControlPolicies: () =>
+    apiClient.get("/api/privacy/access-control/policies"),
+
+  getDataClassification: () =>
+    apiClient.get("/api/privacy/data-classification"),
+
+  verifyCompliance: () =>
+    apiClient.get("/api/privacy/compliance/verify"),
 };
 
+// ── Mock data for placeholders (UI can render while data loads) ──────────────
 export const mockData = {
   stats: { totalLocations: 24, liveFeeds: 18, highDensityAlerts: 7, avgDensity: 63 },
-  locations: [
-    { id: 1, name: "City Mall Entrance",  density: 85, status: "critical" },
-    { id: 2, name: "Metro Station Gate",  density: 74, status: "high"     },
-    { id: 3, name: "Bus Stand Platform",  density: 58, status: "moderate" },
-    { id: 4, name: "Park Entrance",       density: 32, status: "low"      },
-    { id: 5, name: "College Campus",      density: 46, status: "moderate" },
-    { id: 6, name: "Railway Station",     density: 67, status: "high"     },
-  ],
-  alerts: [
-    { id: 1, location: "City Mall Entrance",  type: "Critical Density Alert", density: 85, time: "2 mins ago",  level: "critical" },
-    { id: 2, location: "Metro Station Gate",  type: "High Density Alert",     density: 74, time: "5 mins ago",  level: "high"     },
-    { id: 3, location: "Railway Station",     type: "High Density Alert",     density: 67, time: "8 mins ago",  level: "high"     },
-    { id: 4, location: "Bus Stand Platform",  type: "Moderate Density Alert", density: 58, time: "12 mins ago", level: "moderate" },
-    { id: 5, location: "College Campus",      type: "Moderate Density Alert", density: 46, time: "18 mins ago", level: "moderate" },
-    { id: 6, location: "Park Entrance",       type: "Low Density Alert",      density: 32, time: "25 mins ago", level: "low"      },
-  ],
-  densityDistribution: [
-    { label: "Low (0-30%)",        value: 26, color: "#22c55e" },
-    { label: "Moderate (30-60%)",  value: 34, color: "#f59e0b" },
-    { label: "High (60-80%)",      value: 28, color: "#f97316" },
-    { label: "Critical (80-100%)", value: 12, color: "#ef4444" },
-  ],
-  analyticsData: {
-    totalPeople: 125430, peakDensity: 92, avgDailyDensity: 63, totalAlerts: 36,
-    densityTrend: [
-      { date: "12 May", value: 45 }, { date: "13 May", value: 62 },
-      { date: "14 May", value: 38 }, { date: "15 May", value: 75 },
-      { date: "16 May", value: 55 }, { date: "17 May", value: 88 },
-      { date: "18 May", value: 70 },
-    ],
-  },
 };
