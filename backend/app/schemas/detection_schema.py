@@ -6,7 +6,7 @@ class DetectionRequest(BaseModel):
     """Detection request - contains frame data"""
     camera_id: str
     people_count: int = Field(..., ge=0)
-    density_percentage: float = Field(..., ge=0, le=100)
+    density_percentage: float = Field(..., ge=0)
     density_level: str = Field(pattern="^(low|medium|high|critical)$")
     risk_score: float = Field(..., ge=0, le=1.0)
     frame_data: Optional[dict] = None
