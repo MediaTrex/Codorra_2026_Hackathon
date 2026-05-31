@@ -18,14 +18,18 @@
 ## Team Title
 
 **MetriX**  
-**Privacy-First AI Innovators**
+**[ Privacy-First AI Innovators ]**
 
 ### Contributors
 
 - **ROSHAN PATEL** - Backend Integration & Team Lead
-- **VIPUL RAJ SHAH** - AI/ML Intergration 
-- **NITHEESH S** - Frontend Design & Integration
 - **NABIHG NOORUL ASHIKA B** - System Design & Research
+- **NITHEESH S** - Frontend Design & Integration
+- **VIPUL RAJ SHAH** - AI/ML Intergration 
+
+<a href="https://github.com/MediaTrex/Codorra_2026_Hackathon/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=MediaTrex/Codorra_2026_Hackathon"  />
+</a>
 
 ## Project Screenshots
 
@@ -209,4 +213,6 @@ Documention Links: <br/>
 
 CrowdGuard proves that public safety and privacy can coexist. By using edge AI and privacy-by-design, we built a system that protects lives in crowded spaces without enabling mass surveillance.
 *A balanced, ethical solution for modern smart cities.*
+
+
 
