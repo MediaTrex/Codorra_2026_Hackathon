@@ -1,18 +1,27 @@
 import { Bell, Search, ChevronDown } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export function TopBar({ title, subtitle }) {
+  const { user } = useAuth();
+
+  const getInitial = () => {
+    if (user?.name) return user.name.charAt(0).toUpperCase();
+    if (user?.email) return user.email.charAt(0).toUpperCase();
+    return "U";
+  };
+
   return (
     <div className="flex items-center justify-between px-8 py-4 border-b border-slate-200 dark:border-white/5 bg-white/80 dark:bg-[#080c1a]/80 backdrop-blur-sm sticky top-0 z-40 transition-colors duration-300">
       <div>
-        <h1 className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">{title} <span className="text-2xl">👋</span></h1>
+        <h1 className="text-slate-900 dark:text-white font-bold text-xl tracking-tight">{title}</h1>
         {subtitle && <p className="text-slate-500 text-xs mt-0.5">{subtitle}</p>}
       </div>
       <div className="flex items-center gap-3">
         <div className="relative">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
-          <input 
-            placeholder="Search anything..." 
-            className="pl-9 pr-4 py-2 text-sm bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/8 rounded-xl text-slate-800 dark:text-slate-300 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-cyan-500/40 w-52 transition-colors duration-300" 
+          <input
+            placeholder="Search anything..."
+            className="pl-9 pr-4 py-2 text-sm bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/8 rounded-xl text-slate-800 dark:text-slate-300 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-cyan-500/40 w-52 transition-colors duration-300"
           />
         </div>
         <button className="relative p-2 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/8 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors duration-300">
@@ -20,10 +29,10 @@ export function TopBar({ title, subtitle }) {
           <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
         </button>
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/8 cursor-pointer hover:bg-slate-200 dark:hover:bg-white/8 transition-colors duration-300">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-xs font-bold text-white">A</div>
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-xs font-bold text-white">{getInitial()}</div>
           <div>
-            <div className="text-slate-900 dark:text-white text-xs font-semibold leading-none">Admin</div>
-            <div className="text-slate-500 text-[10px] mt-0.5">Super Admin</div>
+            <div className="text-slate-900 dark:text-white text-xs font-semibold leading-none">{user?.name || user?.email || "User"}</div>
+            <div className="text-slate-500 text-[10px] mt-0.5 capitalize">{user?.role || "user"}</div>
           </div>
           <ChevronDown size={12} className="text-slate-500 ml-1" />
         </div>
