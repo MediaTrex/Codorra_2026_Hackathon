@@ -1,4 +1,4 @@
-# 👥 CrowdGuard: Privacy-Preserving Crowd Density Estimator
+# CrowdGuard: Privacy-Preserving Crowd Density Estimator
 
 **Smart AI-Powered Monitoring for Safer Public Spaces**  
 **Mass Surveillance vs Public Safety Hackathon** | 48-Hour Build
@@ -16,7 +16,7 @@
 </div>
 ---
 
-## 🏆 Team Title
+## Team Title
 
 **MetriX**  
 **Privacy-First AI Innovators**
@@ -28,7 +28,7 @@
 - **NITHEESH S** - Frontend Design & Integration
 - **NABIHG NOORUL ASHIKA B** - System Design & Research
 
-## 📸 Project Screenshots
+## Project Screenshots
 
 ### CrowdGuard - Complete UI Overview
 
@@ -54,7 +54,7 @@
 
 ---
 
-## 📋 Problem Statement & Research Insights
+## Problem Statement & Research Insights
 
 **The Challenge**:  
 Modern smart cities face a critical tension — **mass surveillance for public safety** versus **citizen privacy**. Traditional crowd monitoring systems often rely on facial recognition, identity tracking, and centralized raw video storage, leading to:
@@ -70,7 +70,7 @@ Modern smart cities face a critical tension — **mass surveillance for public s
 
 ---
 
-## 🚀 Solution Approach
+## Solution Approach
 
 **CrowdGuard** uses **anonymous computer vision** to estimate crowd density, detect overcrowding risks, generate heatmaps, and send real-time alerts — all while ensuring **zero facial recognition** and **no identity tracking**.
 
@@ -83,12 +83,12 @@ Modern smart cities face a critical tension — **mass surveillance for public s
 
 ![UI Walkthrough](./docs/images/CrowdGuard.gif)
 
-### 🎥 Live Demo
+### Live Demo
 
-**[🚀 CrowdGuard Demo](https://drive.google.com/file/d/18k31h3aEPSvc5uT7_2tIN_J6h4u0wNKg/view?usp=sharing)**
+**[CrowdGuard Demo](https://drive.google.com/file/d/18k31h3aEPSvc5uT7_2tIN_J6h4u0wNKg/view?usp=sharing)**
 ---
 
-## 🛠️ Tech Stack & Reasoning
+## Tech Stack & Reasoning
 
 | Component       | Technology                  | Why We Chose It |
 |-----------------|-----------------------------|-----------------|
@@ -102,13 +102,13 @@ Modern smart cities face a critical tension — **mass surveillance for public s
 **Why this stack?** It aligns perfectly with your architecture decision — **AI-heavy**, rapid prototyping in 48 hours, and production-ready.
 
 ---
-## 🏗️ System Architecture & Data Flow
+## System Architecture & Data Flow
 
 ```mermaid
 flowchart LR
     Cam[📹 Public Camera / Webcam] 
     
-    subgraph Edge["🔒 Edge Layer (Privacy-Preserving)"]
+    subgraph Edge["Edge Layer (Privacy-Preserving)"]
         YOLO[YOLOv8 + OpenCV<br/>Object Detection]
         PP[Privacy Processor<br/>Anonymization + Density Calc]
     end
@@ -119,12 +119,12 @@ flowchart LR
         Alert[Overcrowding Alert System]
     end
     
-    subgraph Backend["⚡ Backend"]
+    subgraph Backend["Backend"]
         API[FastAPI API]
         DB[(MongoDB<br/>Anonymized Analytics)]
     end
     
-    subgraph Frontend["💻 Frontend"]
+    subgraph Frontend["Frontend"]
         Dash[React Dashboard]
         Viz[Interactive Heatmaps + Alerts]
     end
@@ -153,7 +153,18 @@ flowchart LR
 
 ---
 
-## ✨ Key Features & Innovation
+**API Guide & Documentation**
+
+[Setup APIs Guide](./API_GUIDE.md)  
+[AI Engine API Guide](./ai-engine/Documentations/COMPLETION_CHECKLIST.md)
+[Backend APIs Guide](./backend/API_documentation.md)
+
+[Project Architecture Documentation](./ai-engine/Documentations/ARCHITECTURE.md)
+[Frontend Documentation](./frontend/README.md)
+[AI Engine Documentation](./ai-engine/README.md)
+[AI Engine Quickstart](./ai-engine/Documentations/QUICKSTART.md)
+
+## Key Features & Innovation
 
 **MUST-HAVE MVP Features**:
 - Real-time **Crowd Density Detection**
@@ -168,7 +179,7 @@ flowchart LR
 
 ---
 
-## 🔮 Future Scope & Scalability
+## Future Scope & Scalability
 
 - Multi-camera support with Federated Learning.
 - Integration with IoT sensors and smart city platforms.
@@ -179,7 +190,7 @@ flowchart LR
 **Potential Impact**: Deployable in malls, stadiums, transit hubs, and festivals worldwide — balancing safety and civil liberties.
 
 ---
-## 🎯 Conclusion
+## Conclusion
 
 CrowdGuard proves that public safety and privacy can coexist. By using edge AI and privacy-by-design, we built a system that protects lives in crowded spaces without enabling mass surveillance.
 *A balanced, ethical solution for modern smart cities.*
