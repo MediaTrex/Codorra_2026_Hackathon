@@ -8,9 +8,11 @@
  *Monitor Density.Preserve Dignity*
 <!-- Replace with actual banner image once designed -->
 <div align="center">
-[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688)](https://fastapi.tiangolo.com/)
-[![React](https://img.shields.io/badge/React-18-61DAFB)](https://react.dev/)
+
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+
 </div>
 ---
 
@@ -18,6 +20,36 @@
 
 **MetriX**  
 **Privacy-First AI Innovators**
+
+### Contributors
+
+- **ROSHAN PATEL** - Backend Integration & Team Lead
+- **VIPUL RAJ SHAH** - AI/ML Intergration 
+- **NITHEESH S** - Frontend Design & Integration
+- **NABIHG NOORUL ASHIKA B** - System Design & Research
+
+## 📸 Project Screenshots
+
+### CrowdGuard - Complete UI Overview
+
+<table>
+  <tr>
+    <td align="center"><img src="./docs/images/Login.jpeg" width="245" alt="Login"><br><strong>1. Login</strong></td>
+    <td align="center"><img src="./docs/images/Dashboard.jpeg" width="245" alt="Dashboard"><br><strong>2. Dashboard</strong></td>
+    <td align="center"><img src="./docs/images/Live_monitoring.jpeg" width="245" alt="Live Monitoring"><br><strong>3. Live Monitoring</strong></td>
+    <td align="center"><img src="./docs/images/heatmap.jpeg" width="245" alt="Heatmap"><br><strong>4. Heatmap</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="./docs/images/Analytics.jpeg" width="245" alt="Analytics"><br><strong>5. Analytics</strong></td>
+    <td align="center"><img src="./docs/images/Alerts.jpeg" width="245" alt="Alerts"><br><strong>6. Alerts</strong></td>
+    <td align="center"><img src="./docs/images/Reports.jpeg" width="245" alt="Reports"><br><strong>7. Reports</strong></td>
+    <td align="center"><img src="./docs/images/Settings.jpeg" width="245" alt="Settings"><br><strong>8. Settings</strong></td>
+  </tr>
+</table>
+
+<p align="center">
+  <em>Privacy-Preserving AI-Powered Crowd Monitoring System</em>
+</p>
 
 
 ---
@@ -47,6 +79,13 @@ Modern smart cities face a critical tension — **mass surveillance for public s
 - **Real-Time & Actionable**: Heatmaps + alerts for unsafe conditions.
 - **Ethical AI**: Fully auditable, transparent, and compliant with privacy best practices.
 
+### Project Demo
+
+![UI Walkthrough](./docs/images/CrowdGuard.gif)
+
+### 🎥 Live Demo
+
+**[🚀 CrowdGuard Demo](https://drive.google.com/file/d/18k31h3aEPSvc5uT7_2tIN_J6h4u0wNKg/view?usp=sharing)**
 ---
 
 ## 🛠️ Tech Stack & Reasoning
@@ -140,35 +179,8 @@ flowchart LR
 **Potential Impact**: Deployable in malls, stadiums, transit hubs, and festivals worldwide — balancing safety and civil liberties.
 
 ---
-## 📸 Project Screenshots
+## 🎯 Conclusion
 
-### CrowdGuard - Complete UI Overview
-
-<table>
-  <tr>
-    <td align="center"><img src="./docs/images/Login.jpeg" width="245" alt="Login"><br><strong>1. Login</strong></td>
-    <td align="center"><img src="./docs/images/Dashboard.jpeg" width="245" alt="Dashboard"><br><strong>2. Dashboard</strong></td>
-    <td align="center"><img src="./docs/images/Live_monitoring.jpeg" width="245" alt="Live Monitoring"><br><strong>3. Live Monitoring</strong></td>
-    <td align="center"><img src="./docs/images/heatmap.jpeg" width="245" alt="Heatmap"><br><strong>4. Heatmap</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><img src="./docs/images/Analytics.jpeg" width="245" alt="Analytics"><br><strong>5. Analytics</strong></td>
-    <td align="center"><img src="./docs/images/Alerts.jpeg" width="245" alt="Alerts"><br><strong>6. Alerts</strong></td>
-    <td align="center"><img src="./docs/images/Reports.jpeg" width="245" alt="Reports"><br><strong>7. Reports</strong></td>
-    <td align="center"><img src="./docs/images/Settings.jpeg" width="245" alt="Settings"><br><strong>8. Settings</strong></td>
-  </tr>
-</table>
-
-<p align="center">
-  <em>Privacy-Preserving AI-Powered Crowd Monitoring System</em>
-</p>
-
-## Demo & Conclusion
-
-### Demo link
-
-
-### 🎯 Conclusion
 CrowdGuard proves that public safety and privacy can coexist. By using edge AI and privacy-by-design, we built a system that protects lives in crowded spaces without enabling mass surveillance.
 *A balanced, ethical solution for modern smart cities.*
 
