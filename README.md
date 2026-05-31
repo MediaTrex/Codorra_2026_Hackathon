@@ -14,7 +14,6 @@
 ![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 
 </div>
----
 
 ## Team Title
 
@@ -81,7 +80,6 @@ Modern smart cities face a critical tension — **mass surveillance for public s
 
 ---
 
----
 ## Project Demo
 
 ![UI Walkthrough](./docs/images/CrowdGuard.gif)
@@ -166,7 +164,7 @@ graph TD
 
 ---
 
-**API Guide & Documentation**
+## API Guide & Documentation
 
 API Guide Links: <br/>
 
