@@ -60,6 +60,7 @@
 ## Problem Statement & Research Insights
 
 **The Challenge**:  
+
 Modern smart cities face a critical tension — **mass surveillance for public safety** versus **citizen privacy**. Traditional crowd monitoring systems often rely on facial recognition, identity tracking, and centralized raw video storage, leading to:
 
 - **Privacy Erosion**: Constant tracking raises concerns about mass surveillance, data breaches, and misuse (e.g., mission creep beyond safety).
@@ -75,12 +76,15 @@ Modern smart cities face a critical tension — **mass surveillance for public s
 
 ## Solution Approach
 
-**CrowdGuard** uses **anonymous computer vision** to estimate crowd density, detect overcrowding risks, generate heatmaps, and send real-time alerts — all while ensuring **zero facial recognition** and **no identity tracking**.
+**CrowdGuard** uses **anonymous computer vision** to estimate crowd density, detect overcrowding risks, generate heatmaps, and send real-time alerts — all while ensuring **zero facial recognition** and **no identity tracking**. It addresses the challenge of monitoring and managing large crowds in public spaces while protecting individual privacy. Traditional surveillance systems often rely on facial recognition and identity tracking, which can raise serious privacy and ethical concerns. Our solution uses AI-powered computer vision to estimate crowd density, detect overcrowding, and generate real-time safety alerts without identifying or storing any personal information. By automatically counting people, analyzing crowd distribution, and visualizing density through dashboards and heatmaps, the system helps authorities make informed decisions to prevent congestion, improve public safety, and respond quickly to potential risks. At the same time, privacy-preserving techniques such as face blurring and anonymous analytics ensure that citizens' identities remain protected, creating a balance between public safety and personal privacy.
 
-### Key Differentiators
+### Key Differentiators:
 - **Privacy-First**: Processes data at the edge; only aggregated, anonymized metrics are stored/transmitted.
 - **Real-Time & Actionable**: Heatmaps + alerts for unsafe conditions.
 - **Ethical AI**: Fully auditable, transparent, and compliant with privacy best practices.
+- **Scalable Smart-City Architecture**: Designed to support multiple camera feeds across malls, stadiums, metro stations, airports, and other public spaces from a centralized dashboard.
+- **Low-Cost Deployment**: Leverages existing CCTV infrastructure and lightweight AI models, reducing implementation costs for cities and organizations.
+- **Predictive Safety Insights**: Analyzes historical crowd patterns to identify peak hours and potential overcrowding risks before they become critical situations.
 
 ---
 
