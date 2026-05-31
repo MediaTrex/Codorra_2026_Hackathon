@@ -155,13 +155,13 @@ flowchart LR
 
 **API Guide & Documentation**
 
-[Setup APIs Guide](./API_GUIDE.md)  
-[AI Engine API Guide](./ai-engine/Documentations/COMPLETION_CHECKLIST.md)
-[Backend APIs Guide](./backend/API_documentation.md)
+[Setup APIs Guide](./API_GUIDE.md)  <br/>
+[AI Engine API Guide](./ai-engine/Documentations/COMPLETION_CHECKLIST.md) <br/>
+[Backend APIs Guide](./backend/API_documentation.md) <br/><br />
 
-[Project Architecture Documentation](./ai-engine/Documentations/ARCHITECTURE.md)
-[Frontend Documentation](./frontend/README.md)
-[AI Engine Documentation](./ai-engine/README.md)
+[Project Architecture Documentation](./ai-engine/Documentations/ARCHITECTURE.md) <br/>
+[Frontend Documentation](./frontend/README.md) <br/>
+[AI Engine Documentation](./ai-engine/README.md) <br/>
 [AI Engine Quickstart](./ai-engine/Documentations/QUICKSTART.md)
 
 ## Key Features & Innovation
