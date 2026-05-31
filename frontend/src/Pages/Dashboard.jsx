@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { TopBar, StatCard, SectionCard, DensityBar, PageWrapper } from "../components/UI";
 import { api } from "../Services/api";
 import { RefreshCw } from "lucide-react";
+import "../utils/leafletIcon";
+import MiniMap from "../components/MiniMap";
 
 function DonutChart({ data }) {
   if (!data || data.length === 0) return null;
@@ -21,52 +23,18 @@ function DonutChart({ data }) {
           );
           offset+=dash; return el;
         })}
-        <text x={cx} y={cy-6} textAnchor="middle" fill="white" fontSize="20" fontWeight="700">{total.toFixed(0)}</text>
+        <text x={cx} y={cy-6} textAnchor="middle" fill="#64748b" fontSize="20" fontWeight="700">{total.toFixed(0)}</text>
         <text x={cx} y={cy+12} textAnchor="middle" fill="#64748b" fontSize="10">Total</text>
       </svg>
       <div className="space-y-2">
         {data.map((d,i)=>(
           <div key={i} className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full flex-shrink-0" style={{backgroundColor:d.color,boxShadow:`0 0 6px ${d.color}`}}/>
-            <span className="text-slate-400 text-xs">{d.label}</span>
-            <span className="text-white text-xs font-bold ml-auto pl-4">{d.value.toFixed(0)}%</span>
+            <span className="dark:text-slate-400 text-slate-800 text-xs">{d.label}</span>
+            <span className="dark:text-white text-black text-xs font-bold ml-auto pl-4">{d.value.toFixed(0)}%</span>
           </div>
         ))}
       </div>
-    </div>
-  );
-}
-
-function MiniMap({ cameras }) {
-  if (!cameras || cameras.length === 0) {
-    return (
-      <div className="relative w-full h-44 rounded-xl overflow-hidden bg-[#0a1628] flex items-center justify-center">
-        <span className="text-slate-500 text-sm">No camera data available</span>
-      </div>
-    );
-  }
-
-  const colors = {
-    critical: "#ef4444",
-    high: "#f97316",
-    medium: "#f59e0b",
-    low: "#22c55e",
-  };
-
-  return (
-    <div className="relative w-full h-44 rounded-xl overflow-hidden bg-[#0a1628]">
-      <div className="absolute inset-0" style={{ backgroundImage:`linear-gradient(rgba(6,182,212,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(6,182,212,0.04) 1px,transparent 1px)`, backgroundSize:"30px 30px" }}/>
-      {cameras.slice(0, 8).map((loc, i)=>{
-        const density = loc.density_percentage || 0;
-        const status = density >= 85 ? "critical" : density >= 70 ? "high" : density >= 50 ? "medium" : "low";
-        return (
-          <div key={loc._id || i} className="absolute flex items-center justify-center rounded-full text-white text-[10px] font-bold border-2 border-[#0a1628] cursor-pointer hover:scale-110 transition-transform shadow-lg"
-            style={{ left:`${15+i*12}%`, top:`${20+(i%3)*25}%`, width:28, height:28, backgroundColor:colors[status], boxShadow:`0 0 12px ${colors[status]}80` }}>
-            {Math.round(density)}
-          </div>
-        );
-      })}
-      <div className="absolute bottom-2 left-2 text-[10px] text-slate-500 bg-black/40 px-2 py-1 rounded-lg backdrop-blur-sm">Live Map View</div>
     </div>
   );
 }
@@ -93,14 +61,16 @@ export default function Dashboard() {
         api.getHeatmapData({ period_hours: 1 })
       ]);
 
+      // console.log(analyticsRes, camerasRes, alertsRes, heatmapRes);
+
       // Analytics data
       if (analyticsRes.status === "fulfilled" && analyticsRes.value?.data?.success) {
-        const data = analyticsRes.value.data;
+        const data = analyticsRes.value.data.data;
         setStats({
           totalLocations: data.total_cameras || 0,
           liveFeeds: data.active_cameras || 0,
-          highDensityAlerts: (data.critical_alerts || 0) + (data.high_alerts || 0),
-          avgDensity: data.average_density || 0
+          highDensityAlerts: (data.critical_events || 0) + (data.high_events || 0),
+          avgDensity: data.peak_system_density || 0
         });
       }
 
@@ -116,7 +86,7 @@ export default function Dashboard() {
 
       // Heatmap data for density distribution
       if (heatmapRes.status === "fulfilled" && heatmapRes.value?.data?.data) {
-        const points = heatmapRes.value.data.data;
+        const points = heatmapRes.value.data.data.points;
         const densityLevels = { low: 0, medium: 0, high: 0, critical: 0 };
         points.forEach(p => {
           const d = p.density_percentage || 0;
@@ -128,7 +98,7 @@ export default function Dashboard() {
         const total = points.length || 1;
         setDensityData([
           { label: "Low (<50%)", value: (densityLevels.low / total) * 100, color: "#22c55e" },
-          { label: "Medium (50-70%)", value: (densityLevels.medium / total) * 100, color: "#f59e0b" },
+          { label: "Medium (50-70)% ", value: (densityLevels.medium / total) * 100, color: "#f59e0b" },
           { label: "High (70-85%)", value: (densityLevels.high / total) * 100, color: "#f97316" },
           { label: "Critical (>85%)", value: (densityLevels.critical / total) * 100, color: "#ef4444" }
         ]);
@@ -176,7 +146,7 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-5 gap-4">
           <SectionCard title="Live Overview" className="col-span-3">
-            <MiniMap locations={cameras}/>
+              <MiniMap cameras={cameras} />
           </SectionCard>
           <SectionCard title="Density Distribution" className="col-span-2">
             {loading ? (
@@ -185,9 +155,9 @@ export default function Dashboard() {
               </div>
             ) : (
               <DonutChart data={densityData.length > 0 ? densityData : [
-                { label: "Low", value: 25, color: "#22c55e" },
-                { label: "Medium", value: 25, color: "#f59e0b" },
-                { label: "High", value: 25, color: "#f97316" },
+                { label: "Low", value: 30, color: "#22c55e" },
+                { label: "Medium", value: 10, color: "#f59e0b" },
+                { label: "High", value: 35, color: "#f97316" },
                 { label: "Critical", value: 25, color: "#ef4444" }
               ]}/>
             )}
@@ -213,7 +183,7 @@ export default function Dashboard() {
                     <div className="flex items-start gap-2 mb-2">
                       <span className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${c.dot}`}/>
                       <div>
-                        <div className="text-white text-sm font-semibold">{a.camera_name || "Unknown Camera"}</div>
+                        <div className="dark:text-white text-black text-sm font-semibold">{a.camera_name || "Unknown Camera"}</div>
                         <div className={`text-xs ${c.text}`}>{a.type || a.severity}</div>
                       </div>
                       <span className={`ml-auto text-xl font-bold ${c.text}`}>{a.density_percentage || 0}%</span>
