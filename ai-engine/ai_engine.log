@@ -113,3 +113,7 @@
 2026-05-30 15:27:43,694 - ai-engine - INFO - BackendAPIClient initialized with base URL: http://localhost:8000
 2026-05-30 15:27:43,694 - ai-engine - INFO - AI Engine initialized
 2026-05-30 15:27:43,694 - ai-engine - INFO - AI Engine initialized successfully
+2026-05-31 14:08:12,505 - ai-engine - INFO - AI Engine API starting up
+2026-05-31 14:08:12,506 - ai-engine - INFO - BackendAPIClient initialized with base URL: http://localhost:8000
+2026-05-31 14:08:12,506 - ai-engine - INFO - AI Engine initialized
+2026-05-31 14:08:12,506 - ai-engine - INFO - AI Engine initialized successfully
